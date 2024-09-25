@@ -1,17 +1,18 @@
 import { redirect } from '@sveltejs/kit';
 import { OAuth2Client } from 'google-auth-library';
-import { SECRET_CLIENT_ID, SECRET_CLIENT_SECRET } from '$env/static/private';
+import { SECRET_CLIENT_ID, SECRET_CLIENT_SECRET, APP_JWT_SECRET } from '$env/static/private';
+import { supabase } from "$lib/supabaseClient";
+import jwt from 'jsonwebtoken';
 
 
 export const GET = async ({ url }) => {
     const redirectURL = 'http://localhost:5173/oath';
     const code = url.searchParams.get('code');
+    let id_token = null;
+
     if (!code) {
         throw new Error('Authorization code not found');
     }
-
-    //console.log('returned state',state)
-    console.log('returned code', code)
 
     try {
         const oAuth2Client = new OAuth2Client(
@@ -24,28 +25,53 @@ export const GET = async ({ url }) => {
         const { tokens } = await oAuth2Client.getToken(code);
         oAuth2Client.setCredentials(tokens);
 
-        console.info('Tokens acquired.');
-
         // Verify the id_token
-        const idToken = tokens.id_token;
-        if (!idToken) {
+        id_token = tokens.id_token;
+
+        if (!id_token) {
             throw new Error('ID token not found in tokens');
         }
 
         const ticket = await oAuth2Client.verifyIdToken({
-            idToken: idToken,
+            idToken: id_token,
             audience: SECRET_CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
         });
 
         const payload = ticket.getPayload();
-        console.log('User information:', payload);
 
-        // Optionally, you can now use the payload to manage user sessions
-        // For example, set user information in a cookie or session
+        if (!payload) {
+            throw new Error('Payload not found in ticket');
+        } else {
+            const { data, error } = await supabase.from('Teacher_list').select("*").eq('email', payload.email)
+            if (!data) {
+                throw new Error('Error retrieving data from Teacher_list table')
+            }
+            else if (data?.length > 0) {
+                const { data, error } = await supabase
+                    .from('Teacher').insert([
+                        { email: payload.email, profile_url: payload?.picture, name: payload?.name, given_name: payload?.given_name, family_name: payload?.family_name }
+                    ])
+            } else {
+                const { data, error } = await supabase
+                    .from('Student').insert([
+                        { email: payload.email, profile_url: payload?.picture, name: payload?.name, given_name: payload?.given_name, family_name: payload?.family_name }
+                    ])
+            }
 
+            const accessToken = jwt.sign(payload, APP_JWT_SECRET);   // 1 day
+
+            const expires = new Date(Date.now() + 60 * 60 * 10 * 1000).toUTCString(); // 10 hours
+
+            return new Response(null, {
+                status: 303, // 303 means "See Other", commonly used for redirects after form submission
+                headers: {
+                    'Set-Cookie': `token=${accessToken}; Expires=${expires};`, // Change it to be more secure in production
+                    'Location': '/'  // Redirect to a new path
+                }
+            });
+        }
     } catch (err) {
         console.log('Error logging in with OAuth2 user', err);
+        throw redirect(500, '/');
     }
-
-    throw redirect(303, '/');
 };

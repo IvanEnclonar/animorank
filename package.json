@@ -22,6 +22,7 @@
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@tailwindcss/typography": "^0.5.15",
+		"@types/jsonwebtoken": "^9.0.7",
 		"autoprefixer": "^10.4.19",
 		"daisyui": "^4.10.2",
 		"mdsvex": "^0.12.3",
@@ -42,6 +43,7 @@
 		"@supabase/ssr": "^0.5.1",
 		"@supabase/supabase-js": "^2.45.4",
 		"google-auth-library": "^9.14.1",
+		"jsonwebtoken": "^9.0.2",
 		"marked": "^14.1.2",
 		"svelte-awesome": "^3.3.4"
 	}
