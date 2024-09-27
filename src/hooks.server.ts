@@ -5,7 +5,6 @@ import type { Handle } from '@sveltejs/kit';
 import type { JwtPayload } from 'jsonwebtoken';
 
 export const handle: Handle = async ({ event, resolve }) => {
-    const response = await resolve(event);
     const requestedPath = event.url.pathname;
     const cookies = event.cookies;
 
@@ -23,8 +22,7 @@ export const handle: Handle = async ({ event, resolve }) => {
         event.locals.user = null;
     }
 
-
-    console.log(event.locals.user);
+    const response = await resolve(event);
     // This is where you protect routes
     return response;
 };

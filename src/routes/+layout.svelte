@@ -1,7 +1,16 @@
 <script lang="ts">
 	import '../app.css';
-	let loggedIn = false;
 	let openLogin = false;
+	export let data;
+	const { user } = data;
+
+	const logout = async () => {
+		//remove cookies and refresh
+		document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+		window.location.reload();
+	};
+
+	$: loggedIn = user !== null;
 </script>
 
 <div class="flex flex-col h-screen bg-[#1f1f1f] text-white">
@@ -14,24 +23,7 @@
 		<!--Dropdown start-->
 		<div class="flex gap-2 flex-none ml-auto dropdown dropdown-bottom dropdown-end">
 			{#if loggedIn}
-				<!--Avatar start-->
-				<div tabindex="0" role="button" class="flex btn btn-ghost gap-5">
-					<div class="text-base">Luke Skywalker</div>
-					<div class="avatar">
-						<div class="w-10 rounded-full">
-							<img
-								src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-								alt="avatar"
-							/>
-						</div>
-					</div>
-				</div>
-				<!--Avatar end-->
-
-				<ul class="dropdown-content z-[1] menu p-2 mt-5 shadow bg-base-100 rounded-box w-52">
-					<li><a href="/profile">Profile</a></li>
-					<li><a href="/logout">Logout</a></li>
-				</ul>
+				<button class="btn btn-primary text-white" on:click={logout}>Log out</button>
 			{:else}
 				<button
 					on:click={() => {
