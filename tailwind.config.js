@@ -8,6 +8,7 @@ export default {
       },
       width: {
         '9/10': '90%', // Custom class for 90% width
+        '8.5/10': '85%', // Custom class for 85% width
       },
       fontFamily: {
         poppins_h: ['Poppins', 'sans-serif'], // Add your custom font here
