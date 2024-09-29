@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '../app.css';
+	import menu from '$lib/assets/menu.svg';
 	let openLogin = false;
 	export let data;
 	const { user } = data;
@@ -13,15 +14,14 @@
 	$: loggedIn = user !== null;
 </script>
 
-<div class="flex flex-col h-screen bg-[#1f1f1f] text-white">
+<div class="flex flex-col h-screen bg-[#121212] text-white">
 	<!--Navbar start-->
-	<div class="navbar h-16 border-b-2 px-10">
-		<div class="flex-none">
-			<a href="/" class="btn btn-ghost text-xl">AnimoRank</a>
+	<div class="navbar h-16 border-b-2 px-3 border-borderColor flex justify-between">
+		<div class="">
+			<a href="/" class="cursor-pointer font-bold text-xl font-poppins_h">Animorank</a>
 		</div>
 
-		<!--Dropdown start-->
-		<div class="flex gap-2 flex-none ml-auto dropdown dropdown-bottom dropdown-end">
+		<!-- <div class="flex gap-2 flex-none ml-auto dropdown dropdown-bottom dropdown-end">
 			{#if loggedIn}
 				<button class="btn btn-primary text-white" on:click={logout}>Log out</button>
 			{:else}
@@ -32,8 +32,10 @@
 					class="btn btn-primary text-white">Sign In</button
 				>
 			{/if}
+		</div> -->
+		<div>
+			<img src={menu} alt="menu" class="h-12 cursor-pointer" />
 		</div>
-		<!--Dropdown end-->
 	</div>
 	<!--Navbar end-->
 	<slot></slot>
