@@ -16,8 +16,9 @@
 			>Create new set</button
 		>
 	</div>
+	<div class="flex flex-row flex-wrap justify-start w-8.5/10 mx-auto">
+		<TeacherPSBox />
+		<TeacherPSBox />
+		<TeacherPSBox />
+	</div>
 </div>
-<div class="w-screen bg-[#121212] flex flex-col">
-	<TeacherPSBox />
-</div>
-<!-- <StudentPSBox /> -->
