@@ -1,5 +1,10 @@
 <script>
+	import Modal from './Modal.svelte';
 	export let openLogin;
+
+	const closeModal = () => {
+		openLogin = false;
+	};
 </script>
 
 <div class="fixed grid place-items-center w-full h-full">
