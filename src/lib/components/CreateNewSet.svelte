@@ -11,7 +11,7 @@
 	<input type="text" placeholder="Problem Set Name" class="input input-bordered w-full max-w-xs" />
 	<div class="form-control">
 		<label class="label cursor-pointer">
-			<span class="label-text">Accessible with link</span>
+			<span class="label-text">Auto Accept Students</span>
 			<input type="checkbox" class="checkbox" bind:checked={AccessibleWithLink} />
 		</label>
 	</div>

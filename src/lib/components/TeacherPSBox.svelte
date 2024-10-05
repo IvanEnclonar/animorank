@@ -4,6 +4,7 @@
 	import del from '../assets/delete.svg';
 	import close from '../assets/close.svg';
 	import done from '../assets/done.svg';
+	import link from '../assets/link.svg';
 
 	let togglebttn = false;
 	let openEdit = false;
@@ -81,16 +82,22 @@
 			<div class="mt-5 mb-5 w-full md:w-[600px]">
 				<div class="flex align-middle justify-between border-b border-borderColor p-3">
 					<div class="text-xl">Students</div>
-					<div class="flex align-middle">
-						<button class="btn btn-xs ml-2 mt-1 bg-[#006239] border-0 hover:bg-[#004327]">
-							Add Student
-						</button>
-						<button class="btn btn-ghost btn-xs"
-							><img src={dropdown} alt="dropdown" class="h-7 cursor-pointer" />
-						</button>
-					</div>
 				</div>
 				<div>
+					<h3 class="p-3">Pending</h3>
+					<div class="flex justify-between p-2 align-middle text-center">
+						<h3 class="mt-auto mb-auto ml-4">paulivanenclonar@gmail.com</h3>
+						<button class="btn btn-s bg-[#006239] border-0 hover:bg-[#004327]">
+							<img src={done} alt="edit" class="h-6 cursor-pointer" />
+						</button>
+					</div>
+					<div class="flex justify-between p-2 align-middle text-center">
+						<h3 class="mt-auto mb-auto ml-4">paul_enclonar@dlsu.edu.ph</h3>
+						<button class="btn btn-s bg-[#006239] border-0 hover:bg-[#004327]">
+							<img src={done} alt="edit" class="h-6 cursor-pointer" />
+						</button>
+					</div>
+					<h3 class="p-3">Current</h3>
 					<div class="flex justify-between p-2 align-middle text-center">
 						<h3 class="mt-auto mb-auto ml-4">paulivanenclonar@gmail.com</h3>
 						<button class="btn btn-error btn-s ml-2">
@@ -132,6 +139,9 @@
 			<p class="mt-2">84% student completion</p>
 		</div>
 		<div class="flex justify-end">
+			<button class="btn btn-s mr-2 bg-[#121212] border-0 hover:bg-[#090909]">
+				<img src={link} alt="edit" class="h-6 cursor-pointer" />
+			</button>
 			<button
 				class="btn btn-s bg-[#121212] border-0 hover:bg-[#090909]"
 				on:click={() => (openEdit = true)}
