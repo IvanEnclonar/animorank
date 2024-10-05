@@ -6,3 +6,22 @@ body {
     transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
     @apply bg-white dark:bg-slate-800 text-slate-800 dark:text-white;
 }
+
+
+.ql-toolbar .ql-stroke {
+    fill: none;
+    stroke: #ffffff;
+}
+
+.ql-toolbar .ql-fill {
+    fill: #fff;
+    stroke: none;
+}
+
+.ql-editor.ql-blank::before {
+    color: white;
+}
+
+.ql-toolbar .ql-picker {
+    color: #fff;
+}
