@@ -20,8 +20,18 @@
 		</div>
 
 		{#if loggedIn}
-			<button class="btn btn-ghost" on:click={() => (openSettings = true)}>
+			<button class="btn btn-ghost md:hidden" on:click={() => (openSettings = true)}>
 				<img src={menu} alt="menu" class="h-10 cursor-pointer" />
+			</button>
+			<button
+				class="btn btn-ghost hidden md:grid md:place-items-center overflow-hidden btn-circle"
+				on:click={() => (openSettings = true)}
+			>
+				<img
+					src={user.picture}
+					alt="profile"
+					class="h-10 w-10 object-cover rounded-full cursor-pointer"
+				/>
 			</button>
 		{:else}
 			<button class="btn btn-outline" on:click={() => (openLogin = true)}> Login </button>

@@ -17,7 +17,7 @@
 		<h2 class="mb-10">{user.email}</h2>
 		<button class="mb-2 underline cursor-pointer" on:click={logout}>Logout</button>
 		<button class="underline cursor-pointer">About</button>
-		<button class="btn btn-lg btn-circle btn-ghost" on:click={() => (openSettings = false)}>
+		<button class="btn mt-4 btn-lg btn-circle btn-ghost" on:click={() => (openSettings = false)}>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="h-6 w-6"
