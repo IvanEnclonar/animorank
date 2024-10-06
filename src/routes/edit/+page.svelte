@@ -1,5 +1,6 @@
 <script lang="ts">
 	import MarkdownEditor from '$lib/components/MarkdownEditor.svelte';
+	import Editor from '$lib/components/Editor.svelte';
 	import CodeEditor from '$lib/components/CodeEditor.svelte';
 	let innerWidth: number = 0; //gets the width of the page
 
@@ -39,7 +40,7 @@
 			<input type="text" placeholder="Problem title here" class="input w-full bg-[#121212]" />
 		</div>
 		<div class="w-9/10 mx-auto mt-4">
-			<MarkdownEditor />
+			<Editor />
 		</div>
 	</div>
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
