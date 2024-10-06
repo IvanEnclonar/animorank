@@ -1,12 +1,16 @@
 <script lang="ts">
 	import MarkdownEditor from '$lib/components/MarkdownEditor.svelte';
+	import CodeEditor from '$lib/components/CodeEditor.svelte';
 	let innerWidth: number = 0; //gets the width of the page
 
 	let offset = 0; //offset state, determines how much more pixels should be taken by the right panel.
+	let problem = 'problem';
+	let value = 'Test this code';
 
 	$: leftWidth = innerWidth / 2 + offset;
 	$: rightWidth = innerWidth - leftWidth;
 
+	let setValue: () => void;
 	//start resize, called when the mouse is held down on the resize bar. assigns a listener on mousemove which modifies the offset state.
 	const startResize = (e: MouseEvent) => {
 		let initial = e.clientX;
@@ -30,8 +34,13 @@
 
 <!--Use grow class on your divs if you want no scroll bar, otherwise the content will just overflow all good-->
 <div class="flex justify-start grow overflow-auto relative">
-	<div class="w-8.5/10">
-		<MarkdownEditor />
+	<div class="w-1/2">
+		<div class="flex justify-between w-9/10 mx-auto mt-4">
+			<input type="text" placeholder="Problem title here" class="input w-full bg-[#121212]" />
+		</div>
+		<div class="w-9/10 mx-auto mt-4">
+			<MarkdownEditor />
+		</div>
 	</div>
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div
@@ -44,11 +53,17 @@
 
 	<div class="flex flex-col" style={`width : ${rightWidth}px`}>
 		<span class="flex items-end justify-between gap-3 px-3 w-full pt-1 pb-2 grow">
-			<div class="self-center justify-self-center">code.c</div>
-
-			<div class="flex gap-3">
-				<button class="btn bg-primary text-white"> Submit </button>
-			</div>
+			<div class="self-center justify-self-center">Starter code</div>
 		</span>
+		<CodeEditor bind:value bind:setValue bind:problem />
+		<div class="w-full h-2/5 flex flex-col align-middle items-center">
+			<textarea
+				class="textarea bg-[#121212] textarea-bordered w-9/10 mt-10"
+				placeholder="Return statement"
+			></textarea>
+			<div class="w-9/10 flex justify-end mt-4">
+				<button class="btn bg-[#006239] text-white hover:bg-[#004327]">Finish</button>
+			</div>
+		</div>
 	</div>
 </div>
