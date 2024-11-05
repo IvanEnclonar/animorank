@@ -17,7 +17,7 @@
 
 	let editor: Monaco.editor.IStandaloneCodeEditor;
 	let monaco: typeof Monaco;
-	let editorContainer: HTMLElement = $state();
+	let editorContainer: HTMLElement | undefined = $state();
 
 	let mounted = false;
 	let totalSize = 0.0;
@@ -44,12 +44,21 @@
 		});
 
 		// Your monaco instance is ready, let's display some code!
-		editor = monaco.editor.create(editorContainer, {
-			value: value,
-			language: 'c',
-			automaticLayout: true,
-			theme: 'custom-vs-dark' // Use the custom theme
-		});
+		if (editorContainer === undefined)
+			editor = monaco.editor.create(document.body, {
+				value: value,
+				language: 'c',
+				automaticLayout: true,
+				theme: 'custom-vs-dark' // Use the custom theme
+			});
+		else {
+			editor = monaco.editor.create(editorContainer, {
+				value: value,
+				language: 'c',
+				automaticLayout: true,
+				theme: 'custom-vs-dark' // Use the custom theme
+			});
+		}
 
 		editor.onDidChangeModelContent((e) => {
 			//console.log(e.changes[0])
