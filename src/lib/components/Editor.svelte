@@ -4,9 +4,9 @@
 	import { defaultExtensions } from '@tiptap/starter-kit';
 	import BubbleMenu from '@tiptap/extension-bubble-menu';
 
-	let bubbleMenu;
-	let element;
-	let editor;
+	let bubbleMenu = $state();
+	let element = $state();
+	let editor = $state();
 
 	onMount(() => {
 		editor = new Editor({
@@ -38,19 +38,19 @@
 	{#if editor}
 		<div class="fixed-menu">
 			<button
-				on:click={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+				onclick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
 				class:active={editor.isActive('heading', { level: 1 })}
 			>
 				H1
 			</button>
 			<button
-				on:click={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+				onclick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
 				class:active={editor.isActive('heading', { level: 2 })}
 			>
 				H2
 			</button>
 			<button
-				on:click={() => editor.chain().focus().setParagraph().run()}
+				onclick={() => editor.chain().focus().setParagraph().run()}
 				class:active={editor.isActive('paragraph')}
 			>
 				P
@@ -61,19 +61,19 @@
 	<div class="bubble-menu" bind:this={bubbleMenu}>
 		{#if editor}
 			<button
-				on:click={() => editor.chain().focus().toggleBold().run()}
+				onclick={() => editor.chain().focus().toggleBold().run()}
 				class:active={editor.isActive('bold')}
 			>
 				Bold
 			</button>
 			<button
-				on:click={() => editor.chain().focus().toggleItalic().run()}
+				onclick={() => editor.chain().focus().toggleItalic().run()}
 				class:active={editor.isActive('italic')}
 			>
 				Italic
 			</button>
 			<button
-				on:click={() => editor.chain().focus().toggleStrike().run()}
+				onclick={() => editor.chain().focus().toggleStrike().run()}
 				class:active={editor.isActive('strike')}
 			>
 				Strike
@@ -81,7 +81,7 @@
 		{/if}
 	</div>
 
-	<div bind:this={element} />
+	<div bind:this={element}></div>
 </div>
 
 <style lang="scss">

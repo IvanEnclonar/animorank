@@ -6,8 +6,8 @@
 	import done from '../assets/done.svg';
 	import link from '../assets/link.svg';
 
-	let togglebttn = false;
-	let openEdit = false;
+	let togglebttn = $state(false);
+	let openEdit = $state(false);
 </script>
 
 {#if openEdit}
@@ -116,13 +116,13 @@
 		<div class="flex justify-end w-full mt-8 sm:mt-20">
 			<button
 				class="btn btn-s mr-2 bg-[#121212] border-0 hover:bg-[#090909]"
-				on:click={() => (openEdit = false)}
+				onclick={() => (openEdit = false)}
 			>
 				<img src={close} alt="edit" class="h-6 cursor-pointer" />
 			</button>
 			<button
 				class="btn btn-s bg-[#006239] border-0 hover:bg-[#004327]"
-				on:click={() => (openEdit = false)}
+				onclick={() => (openEdit = false)}
 			>
 				<img src={done} alt="edit" class="h-6 cursor-pointer" />
 			</button>
@@ -144,7 +144,7 @@
 			</button>
 			<button
 				class="btn btn-s bg-[#121212] border-0 hover:bg-[#090909]"
-				on:click={() => (openEdit = true)}
+				onclick={() => (openEdit = true)}
 			>
 				<img src={edit} alt="edit" class="h-6 cursor-pointer" />
 			</button>

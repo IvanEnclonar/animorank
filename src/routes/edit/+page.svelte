@@ -2,16 +2,16 @@
 	import MarkdownEditor from '$lib/components/MarkdownEditor.svelte';
 	import Editor from '$lib/components/Editor.svelte';
 	import CodeEditor from '$lib/components/CodeEditor.svelte';
-	let innerWidth: number = 0; //gets the width of the page
+	let innerWidth: number = $state(0); //gets the width of the page
 
-	let offset = 0; //offset state, determines how much more pixels should be taken by the right panel.
-	let problem = 'problem';
-	let value = 'Test this code';
+	let offset = $state(0); //offset state, determines how much more pixels should be taken by the right panel.
+	let problem = $state('problem');
+	let value = $state('Test this code');
 
-	$: leftWidth = innerWidth / 2 + offset;
-	$: rightWidth = innerWidth - leftWidth;
+	let leftWidth = $derived(innerWidth / 2 + offset);
+	let rightWidth = $derived(innerWidth - leftWidth);
 
-	let setValue: () => void;
+	let setValue: () => void = $state();
 	//start resize, called when the mouse is held down on the resize bar. assigns a listener on mousemove which modifies the offset state.
 	const startResize = (e: MouseEvent) => {
 		let initial = e.clientX;
@@ -31,7 +31,7 @@
 	};
 </script>
 
-<svelte:window on:mouseup={abortResize} bind:innerWidth />
+<svelte:window onmouseup={abortResize} bind:innerWidth />
 
 <!--Use grow class on your divs if you want no scroll bar, otherwise the content will just overflow all good-->
 <div class="flex justify-start grow overflow-auto relative">
@@ -43,13 +43,13 @@
 			<Editor />
 		</div>
 	</div>
-	<!-- svelte-ignore a11y-no-static-element-interactions -->
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div
 		class="w-2 cursor-col-resize flex justify-center items-center bg-black/30"
 		id="divider"
-		on:mousedown={startResize}
+		onmousedown={startResize}
 	>
-		<button class="w-full" title="reset sizing" on:click={resetResize}> | </button>
+		<button class="w-full" title="reset sizing" onclick={resetResize}> | </button>
 	</div>
 
 	<div class="flex flex-col" style={`width : ${rightWidth}px`}>

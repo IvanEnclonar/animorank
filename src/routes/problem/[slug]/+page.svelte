@@ -1,20 +1,24 @@
 <script lang="ts">
     import CodeEditor from '$lib/components/CodeEditor.svelte'
-    export let data
     import { marked } from 'marked';
+  interface Props {
+    data: any;
+  }
+
+  let { data }: Props = $props();
   
-    let problem = data.Problem?.[0] ?? {}
-    let innerWidth : number = 0 //gets the width of the page
+    let problem = $state(data.Problem?.[0] ?? {})
+    let innerWidth : number = $state(0) //gets the width of the page
 
-    let offset = 0 //offset state, determines how much more pixels should be taken by the right panel.
+    let offset = $state(0) //offset state, determines how much more pixels should be taken by the right panel.
 
-    $: leftWidth = innerWidth / 2 + offset 
-    $: rightWidth = innerWidth - leftWidth
-    $: problemBody = problem.body
+    let leftWidth = $derived(innerWidth / 2 + offset) 
+    let rightWidth = $derived(innerWidth - leftWidth)
+    let problemBody = $derived(problem.body)
     
-    let value = problem.starter_code
+    let value = $state(problem.starter_code)
 
-    let setValue : () => void
+    let setValue : () => void = $state()
 
     //this function sends a post request to the api.
     const handleSubmit = async () => {
@@ -43,7 +47,7 @@
 
 </script>
 
-<svelte:window on:mouseup={abortResize} bind:innerWidth/>
+<svelte:window onmouseup={abortResize} bind:innerWidth/>
 
 <!--Use grow class on your divs if you want no scroll bar, otherwise the content will just overflow all good-->
 <div class="flex justify-start grow overflow-auto relative">
@@ -54,9 +58,9 @@
         </div>
     </div>
 
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div class="w-2 cursor-col-resize flex justify-center items-center bg-black/30" id="divider" on:mousedown={startResize}> 
-       <button class="w-full" title="reset sizing" on:click={resetResize}> | </button>
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <div class="w-2 cursor-col-resize flex justify-center items-center bg-black/30" id="divider" onmousedown={startResize}> 
+       <button class="w-full" title="reset sizing" onclick={resetResize}> | </button>
     </div>
 
     <div class="flex flex-col" style={`width : ${rightWidth}px`}>
@@ -64,7 +68,7 @@
             <div class="self-center justify-self-center"> code.c </div>
 
             <div class="flex gap-3">
-                <button class="btn" on:click={handleSubmit}> Run </button> 
+                <button class="btn" onclick={handleSubmit}> Run </button> 
                 <button class="btn bg-primary text-white"> Submit </button>
             </div>
 

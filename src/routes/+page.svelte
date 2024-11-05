@@ -9,7 +9,7 @@
 	import TeacherPSBox from '$lib/components/TeacherPSBox.svelte';
 	import CreateNewSet from '$lib/components/CreateNewSet.svelte';
 
-	let showCreatePSetModal = false;
+	let showCreatePSetModal = $state(false);
 </script>
 
 <div class="w-screen bg-[#121212]">
@@ -17,7 +17,7 @@
 		<h2 class="font-arial text-2xl">Dashboard</h2>
 		<button
 			class="btn btn-s bg-[#006239] text-white hover:bg-[#004327] mt-1"
-			on:click={() => (showCreatePSetModal = true)}>Create new set</button
+			onclick={() => (showCreatePSetModal = true)}>Create new set</button
 		>
 	</div>
 	<div class="flex flex-row flex-wrap justify-start w-8.5/10 mx-auto">

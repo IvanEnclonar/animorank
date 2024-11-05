@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 
 	/** @type {any}*/
-	let editor;
+	let editor = $state();
 
 	let toolbarOptions = [
 		[{ header: 1 }, { header: 2 }, 'blockquote', 'link', 'image', 'video'],
@@ -25,7 +25,7 @@
 </script>
 
 <div class="w-full">
-	<div bind:this={editor} />
+	<div bind:this={editor}></div>
 </div>
 
 <style>

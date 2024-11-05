@@ -1,13 +1,13 @@
 <script>
 	import dropdown from '$lib/assets/dropdown.svg';
 
-	let toggle = false;
+	let toggle = $state(false);
 </script>
 
 <div class="w-9/10 mx-auto border mt-5 rounded border-borderColor">
 	<div class="flex justify-between border-b border-borderColor p-2">
 		<div class="">CCPROG3 S13</div>
-		<button class="btn btn-ghost btn-xs" on:click={() => (toggle = !toggle)}
+		<button class="btn btn-ghost btn-xs" onclick={() => (toggle = !toggle)}
 			><img src={dropdown} alt="dropdown" class="h-7 cursor-pointer" />
 		</button>
 	</div>

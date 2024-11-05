@@ -4,12 +4,17 @@
 	import MobileLoginModal from '$lib/components/MobileLoginModal.svelte';
 	import MobileSettingsModal from '$lib/components/MobileSettingsModal.svelte';
 
-	let openSettings = false;
-	let openLogin = false;
-	export let data;
+	let openSettings = $state(false);
+	let openLogin = $state(false);
+	interface Props {
+		data: any;
+		children?: import('svelte').Snippet;
+	}
+
+	let { data, children }: Props = $props();
 	const { user } = data;
 
-	$: loggedIn = user !== null;
+	let loggedIn = $derived(user !== null);
 </script>
 
 <div class="flex flex-col h-screen bg-[#121212] text-white">
@@ -20,12 +25,12 @@
 		</div>
 
 		{#if loggedIn}
-			<button class="btn btn-ghost md:hidden" on:click={() => (openSettings = true)}>
+			<button class="btn btn-ghost md:hidden" onclick={() => (openSettings = true)}>
 				<img src={menu} alt="menu" class="h-10 cursor-pointer" />
 			</button>
 			<button
 				class="btn btn-ghost hidden md:grid md:place-items-center overflow-hidden btn-circle"
-				on:click={() => (openSettings = true)}
+				onclick={() => (openSettings = true)}
 			>
 				<img
 					src={user.picture}
@@ -34,11 +39,11 @@
 				/>
 			</button>
 		{:else}
-			<button class="btn btn-outline" on:click={() => (openLogin = true)}> Login </button>
+			<button class="btn btn-outline" onclick={() => (openLogin = true)}> Login </button>
 		{/if}
 	</div>
 	<!--Navbar ends and body begins-->
-	<slot></slot>
+	{@render children?.()}
 	{#if openLogin && !loggedIn}
 		<MobileLoginModal bind:openLogin />
 	{/if}

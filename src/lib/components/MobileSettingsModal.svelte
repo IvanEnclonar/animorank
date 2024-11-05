@@ -1,6 +1,6 @@
 <script>
-	export let openSettings;
-	export let user;
+	/** @type {{openSettings: any, user: any}} */
+	let { openSettings = $bindable(), user } = $props();
 
 	const logout = async () => {
 		//remove cookies and refresh
@@ -15,10 +15,10 @@
 			<img src={user.picture} alt="profile" class="w-full h-full rounded-full" />
 		</div>
 		<h2 class="mb-10">{user.email}</h2>
-		<button class="mb-2 underline cursor-pointer" on:click={logout}>Logout</button>
+		<button class="mb-2 underline cursor-pointer" onclick={logout}>Logout</button>
 		<button class="mb-2 underline cursor-pointer">About</button>
 		<button class="mb-2 underline cursor-pointer">Support</button>
-		<button class="btn mt-4 btn-square btn-ghost" on:click={() => (openSettings = false)}>
+		<button class="btn mt-4 btn-square btn-ghost" onclick={() => (openSettings = false)}>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="h-6 w-6"
@@ -36,7 +36,7 @@
 		</button>
 	</div>
 	<button
-		on:click={() => {
+		onclick={() => {
 			openSettings = false;
 		}}
 		class="bg-black/75 absolute w-full h-full z-2"
