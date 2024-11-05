@@ -1,6 +1,7 @@
 <script>
 	import Modal from './Modal.svelte';
-	export let openLogin;
+	/** @type {{openLogin: any}} */
+	let { openLogin = $bindable() } = $props();
 
 	const closeModal = () => {
 		openLogin = false;
@@ -32,7 +33,7 @@
 		</div>
 	</div>
 	<button
-		on:click={() => {
+		onclick={() => {
 			openLogin = false;
 		}}
 		class="bg-black/50 absolute w-full h-full z-2"

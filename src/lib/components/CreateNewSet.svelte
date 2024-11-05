@@ -2,10 +2,12 @@
 	import Modal from './Modal.svelte';
 	import done from '$lib/assets/done.svg';
 
-	export let closeModal;
-	export let show = false;
-	let AccessibleWithLink = false;
+	/** @type {{closeModal: any, show?: boolean}} */
+	let { closeModal, show = false } = $props();
+	let AccessibleWithLink = $state(false);
 </script>
+
+1
 
 <Modal {show} {closeModal}>
 	<input type="text" placeholder="Problem Set Name" class="input input-bordered w-full max-w-xs" />
