@@ -51,7 +51,6 @@
 		"google-auth-library": "^9.14.1",
 		"jsonwebtoken": "^9.0.2",
 		"marked": "^14.1.2",
-		"quill": "^2.0.2",
 		"svelte-awesome": "^3.3.4"
 	}
 }

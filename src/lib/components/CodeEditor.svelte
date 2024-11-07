@@ -4,16 +4,23 @@
 	import type * as Monaco from 'monaco-editor/esm/vs/editor/editor.api';
 	import { restoreHistory, updateHistory } from '$lib/history';
 
-	export const setValue = () => {
-		value = editor.getValue();
-	}; //this function allows us to update the value prop with a function
-	interface Props {
-		value?: string;
-		problem: string;
-	}
+	// export const setValue = () => {
+	// 	value = editor.getValue();
+	// };
 
-	let { value = $bindable('#include<stdio.h>\n\nint main(){ \n\n  return 0;\n}'), problem }: Props =
-		$props();
+	type Props = {
+		value?: string;
+		setValue?: () => void;
+		problem?: any;
+	};
+
+	let {
+		value = $bindable('#include<stdio.h>\n\nint main(){ \n\n  return 0;\n}'),
+		setValue = $bindable(() => {
+			value = editor.getValue();
+		}),
+		problem = $bindable()
+	}: Props = $props();
 
 	let editor: Monaco.editor.IStandaloneCodeEditor;
 	let monaco: typeof Monaco;
