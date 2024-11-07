@@ -11,7 +11,6 @@
 		bold: false,
 		italic: false,
 		strike: false,
-		code: false,
 		paragraph: false,
 		h1: false,
 		h2: false,
@@ -26,7 +25,30 @@
 		editor = new Editor({
 			element: element,
 			extensions: [StarterKit],
-			content: '<p>Hello World! 🌍️ </p>',
+			content: `<h1>Hello World! 🌍️ </h1>
+						<p>This is a simple document that showcases various formatting options.</p>
+						<p></p>
+						<h2>Heading 2: Text Formatting </h2>
+						<p>You can apply different text styles to make your content stand out:</p>
+						<ul>
+						<li><p><strong>Bold Text</strong></p></li>
+						<li><p><em>Italic Text</em></p></li>
+						<li><p><s> Strike Through</s></p></li>
+						</ul>
+						<p></p>
+						<h3> Heading 3: Code blocks and blockquote </h3>
+						<p></p>
+						<p>You can display a code block:</p>
+						<pre>
+						<code>
+							Code!
+						</code>
+						</pre>
+						<p></p>
+						<p>And a blockquote:</p>
+						<blockquote>
+						<p>Hey there!</p>
+						</blockquote>`,
 			onTransaction: () => {
 				// force re-render so `editor.isActive` works as expected
 				editor = editor;
@@ -44,7 +66,6 @@
 		active.bold = editor.isActive('bold');
 		active.italic = editor.isActive('italic');
 		active.strike = editor.isActive('strike');
-		active.code = editor.isActive('code');
 		active.paragraph = editor.isActive('paragraph');
 		active.h1 = editor.isActive('heading', { level: 1 });
 		active.h2 = editor.isActive('heading', { level: 2 });
@@ -57,7 +78,7 @@
 </script>
 
 {#if editor}
-	<div class="mb-3">
+	<div class="mb-2">
 		<button
 			onclick={() => {
 				editor.chain().focus().toggleBold().run();

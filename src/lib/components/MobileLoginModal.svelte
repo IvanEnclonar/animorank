@@ -9,7 +9,7 @@
 </script>
 
 <div class="fixed grid place-items-center w-full h-full">
-	<div class="card bg-base-100 shadow-xl w-96 p-8 flex flex-col justify-center items-center z-10">
+	<div class="	 bg-base-100 shadow-xl w-96 p-8 flex flex-col justify-center items-center z-10">
 		<h1 class="text-3xl font-bold mb-6">Hi there!</h1>
 		<div class="card-body w-full">
 			<p class="text-center text-gray-400 mb-4">Please sign in to continue</p>
