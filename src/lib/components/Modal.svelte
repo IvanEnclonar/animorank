@@ -5,9 +5,11 @@
 
 <!-- Modal Background -->
 <div class="fixed top-0 left-0 grid place-items-center w-full h-full" class:hidden={!show}>
-	<div class="card bg-base-100 shadow-xl w-96 flex flex-col justify-center items-center z-10">
+	<div
+		class="card bg-base-100 shadow-xl w-96 flex flex-col justify-center items-center z-10 bg-[#1E1E1E] relative"
+	>
 		<div class="flex justify-end w-full p-1">
-			<button class="btn btn-square btn-ghost" onclick={closeModal}>
+			<button class="btn btn-square btn-ghost" onclick={closeModal} aria-label="Close">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					class="h-6 w-6"
@@ -28,5 +30,6 @@
 			{@render children?.()}
 		</div>
 	</div>
-	<button onclick={closeModal} class="bg-black/50 absolute w-full h-full z-2"></button>
+	<button onclick={closeModal} class="bg-black/50 absolute w-full h-full z-2" aria-label="Close"
+	></button>
 </div>

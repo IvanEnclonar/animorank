@@ -18,7 +18,11 @@
 		<button class="mb-2 underline cursor-pointer" onclick={logout}>Logout</button>
 		<button class="mb-2 underline cursor-pointer">About</button>
 		<button class="mb-2 underline cursor-pointer">Support</button>
-		<button class="btn mt-4 btn-square btn-ghost" onclick={() => (openSettings = false)}>
+		<button
+			class="btn mt-4 btn-square btn-ghost"
+			onclick={() => (openSettings = false)}
+			aria-label="Close"
+		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="h-6 w-6"
@@ -40,5 +44,7 @@
 			openSettings = false;
 		}}
 		class="bg-black/75 absolute w-full h-full z-2"
-	></button>
+		aria-label="Close"
+	>
+	</button>
 </div>
