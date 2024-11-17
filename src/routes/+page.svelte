@@ -10,20 +10,38 @@
 	import CreateNewSet from '$lib/components/CreateNewSet.svelte';
 
 	let showCreatePSetModal = $state(false);
+	let { data } = $props();
 </script>
 
-<div class="w-screen bg-[#121212]">
-	<div class="mt-12 px-3 flex justify-between">
-		<h2 class="font-arial text-2xl">Dashboard</h2>
-		<button
-			class="btn btn-s bg-[#006239] text-white hover:bg-[#004327] mt-1"
-			onclick={() => (showCreatePSetModal = true)}>Create new set</button
-		>
+{#if data.user?.role === 'teacher'}
+	<div class="w-screen bg-[#121212]">
+		<div class="mt-12 px-3 flex justify-between">
+			<h2 class="font-arial text-2xl">Dashboard</h2>
+			<button
+				class="btn btn-s bg-[#006239] text-white hover:bg-[#004327] mt-1"
+				onclick={() => (showCreatePSetModal = true)}>Create new set</button
+			>
+		</div>
+		<div class="flex flex-row flex-wrap justify-start w-8.5/10 mx-auto">
+			<TeacherPSBox />
+			<TeacherPSBox />
+			<TeacherPSBox />
+		</div>
+		<CreateNewSet closeModal={() => (showCreatePSetModal = false)} show={showCreatePSetModal} />
 	</div>
-	<div class="flex flex-row flex-wrap justify-start w-8.5/10 mx-auto">
-		<TeacherPSBox />
-		<TeacherPSBox />
-		<TeacherPSBox />
+{:else if data.user?.role === 'student'}
+	<div class="w-screen bg-[#121212]">
+		<div class="mt-12 px-3 flex justify-between">
+			<h2 class="font-arial text-2xl">Dashboard</h2>
+		</div>
+		<div class="flex flex-row flex-wrap justify-start w-8.5/10 mx-auto">
+			<StudentPSBox />
+			<StudentPSBox />
+			<StudentPSBox />
+		</div>
 	</div>
-	<CreateNewSet closeModal={() => (showCreatePSetModal = false)} show={showCreatePSetModal} />
-</div>
+{:else}
+	<div class="fixed grid place-items-center w-full h-full">
+		<h>404 User Not Found</h>
+	</div>
+{/if}

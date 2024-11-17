@@ -8,6 +8,7 @@ import jwt from 'jsonwebtoken';
 export const GET = async ({ url }) => {
     const redirectURL = 'http://localhost:5173/oath';
     const code = url.searchParams.get('code');
+    let role = null;
     let id_token = null;
 
     if (!code) {
@@ -51,15 +52,16 @@ export const GET = async ({ url }) => {
                     .from('Teacher').insert([
                         { email: payload.email, profile_url: payload?.picture, name: payload?.name, given_name: payload?.given_name, family_name: payload?.family_name }
                     ])
+                role = 'teacher';
             } else {
                 const { data, error } = await supabase
                     .from('Student').insert([
                         { email: payload.email, profile_url: payload?.picture, name: payload?.name, given_name: payload?.given_name, family_name: payload?.family_name }
                     ])
+                role = 'student';
             }
 
-            const accessToken = jwt.sign(payload, APP_JWT_SECRET);   // 1 day
-
+            const accessToken = jwt.sign({ ...payload, role }, APP_JWT_SECRET);
             const expires = new Date(Date.now() + 60 * 60 * 10 * 1000).toUTCString(); // 10 hours
 
             return new Response(null, {
