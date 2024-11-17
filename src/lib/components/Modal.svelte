@@ -6,7 +6,7 @@
 <!-- Modal Background -->
 <div class="fixed top-0 left-0 grid place-items-center w-full h-full" class:hidden={!show}>
 	<div
-		class="card bg-base-100 shadow-xl w-96 flex flex-col justify-center items-center z-10 bg-[#1E1E1E] relative"
+		class="card shadow-xl w-96 flex flex-col justify-center items-center z-10 bg-[#1E1E1E] relative"
 	>
 		<div class="flex justify-end w-full p-1">
 			<button class="btn btn-square btn-ghost" onclick={closeModal} aria-label="Close">
