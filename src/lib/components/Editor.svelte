@@ -6,7 +6,6 @@
 
 	let element = $state();
 	let editor = $state();
-
 	let active = $state({
 		bold: false,
 		italic: false,
@@ -74,6 +73,10 @@
 		active.orderedList = editor.isActive('orderedList');
 		active.codeBlock = editor.isActive('codeBlock');
 		active.blockquote = editor.isActive('blockquote');
+	};
+
+	export const getContent = () => {
+		return editor.getHTML();
 	};
 </script>
 

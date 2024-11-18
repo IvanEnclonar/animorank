@@ -23,9 +23,12 @@
 				<div class="flex align-middle justify-between border-b border-borderColor p-3">
 					<div class="text-xl">Problems</div>
 					<div class="flex align-middle">
-						<button class="btn btn-xs ml-2 mt-1 bg-[#006239] border-0 hover:bg-[#004327]">
+						<a
+							href="/create/{pset.id}"
+							class="btn btn-xs ml-2 mt-1 bg-[#006239] border-0 hover:bg-[#004327]"
+						>
 							Add Problem
-						</button>
+						</a>
 						<button class="btn btn-ghost btn-xs"
 							><img src={dropdown} alt="dropdown" class="h-7 cursor-pointer" />
 						</button>
