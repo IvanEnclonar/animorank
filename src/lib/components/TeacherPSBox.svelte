@@ -7,17 +7,18 @@
 	import link from '../assets/link.svg';
 	import statistics from '../assets/statistics.svg';
 
+	let { pset } = $props();
 	let togglebttn = $state(false);
 	let openEdit = $state(false);
+
+	console.log(pset);
 </script>
 
 {#if openEdit}
 	<div class="w-full mt-8 min-h-72 p-3 bg-[#1F1F1F] rounded cursor-pointer flex flex-wrap">
-		<h2 class="text-2xl mb-4 w-full">CCPROG S13</h2>
+		<h2 class="text-2xl mb-4 w-full">{pset.title}</h2>
 		<div class="px-3 pb-10 w-full">
-			<p class="mt-2">34 students</p>
-			<p class="mt-2">10/12 active problems</p>
-			<p class="mt-2">84% student completion</p>
+			{pset.description}
 		</div>
 		<div class="flex justify-between w-full flex-wrap">
 			<div class="mt-5 mb-5 w-ful md:w-[600px]">
@@ -142,11 +143,9 @@
 	<div
 		class="mt-8 min-h-72 w-96 sm:mr-5 p-3 bg-[#1F1F1F] rounded cursor-pointer flex flex-col justify-between"
 	>
-		<h2 class="text-2xl mb-4">CCPROG S13</h2>
+		<h2 class="text-2xl mb-4">{pset.title}</h2>
 		<div class="px-4 pb-10">
-			<p class="mt-2">34 students</p>
-			<p class="mt-2">10/12 active problems</p>
-			<p class="mt-2">84% student completion</p>
+			{pset.description}
 		</div>
 		<div class="flex justify-end">
 			<button class="btn btn-s mr-2 bg-[#121212] border-0 hover:bg-[#090909]">

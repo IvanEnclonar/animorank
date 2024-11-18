@@ -23,9 +23,11 @@
 			>
 		</div>
 		<div class="flex flex-row flex-wrap justify-start w-8.5/10 mx-auto">
-			<TeacherPSBox />
-			<TeacherPSBox />
-			<TeacherPSBox />
+			{#if data.psets}
+				{#each data.psets as pset}
+					<TeacherPSBox {pset} />
+				{/each}
+			{/if}
 		</div>
 		<CreateNewSet
 			closeModal={() => (showCreatePSetModal = false)}

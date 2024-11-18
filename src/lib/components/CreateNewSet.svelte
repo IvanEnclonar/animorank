@@ -15,6 +15,7 @@
 			placeholder="Problem Set Name"
 			name="title"
 			class="input input-bordered w-full max-w-xs bg-inherit"
+			required
 		/>
 		<textarea
 			class="textarea textarea-bordered bg-inherit w-full mt-5"
