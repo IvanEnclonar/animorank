@@ -40,6 +40,7 @@ export const actions = {
             title: formData.get('title'),
             description: formData.get('description'),
             owner_email: formData.get('owner_email'),
+            auto_accept: formData.get('auto_accept') === 'on' ? true : false
         };
 
         // Check if input is valid

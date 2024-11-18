@@ -10,8 +10,6 @@
 	let { pset } = $props();
 	let togglebttn = $state(false);
 	let openEdit = $state(false);
-
-	console.log(pset);
 </script>
 
 {#if openEdit}

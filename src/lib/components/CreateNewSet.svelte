@@ -25,7 +25,12 @@
 		<div class="form-control">
 			<label class="label cursor-pointer">
 				<span class="label-text">Auto Accept Students</span>
-				<input type="checkbox" class="checkbox" bind:checked={AccessibleWithLink} />
+				<input
+					type="checkbox"
+					class="checkbox"
+					bind:checked={AccessibleWithLink}
+					name="auto_accept"
+				/>
 			</label>
 		</div>
 		<div class="flex justify-end mt-5">
