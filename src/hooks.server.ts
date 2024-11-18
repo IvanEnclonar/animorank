@@ -24,9 +24,11 @@ export const handle: Handle = async ({ event, resolve }) => {
     }
 
     const response = await resolve(event);
+
     if (protectedRoutes.includes(requestedPath) && !event.locals.user) {
         throw redirect(303, "/about")
     }
+
     return response;
 };
 

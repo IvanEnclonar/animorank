@@ -27,7 +27,11 @@
 			<TeacherPSBox />
 			<TeacherPSBox />
 		</div>
-		<CreateNewSet closeModal={() => (showCreatePSetModal = false)} show={showCreatePSetModal} />
+		<CreateNewSet
+			closeModal={() => (showCreatePSetModal = false)}
+			show={showCreatePSetModal}
+			email={data.user.email}
+		/>
 	</div>
 {:else if data.user?.role === 'student'}
 	<div class="w-screen bg-[#121212]">
