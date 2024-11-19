@@ -11,6 +11,7 @@
 	let togglebttn = $state(false);
 	let openEdit = $state(false);
 	let loading = $state(false);
+	let linkFeedback = $state(false);
 	/**
 	 * @type {any[]}
 	 */
@@ -32,6 +33,14 @@
 			problems.push(i);
 		});
 		loading = false;
+	};
+
+	const linkFeedbackHandler = () => {
+		navigator.clipboard.writeText('http://localhost:5000/pset/' + pset.id);
+		linkFeedback = true;
+		setTimeout(() => {
+			linkFeedback = false;
+		}, 2000);
 	};
 </script>
 
@@ -146,9 +155,21 @@
 			{pset.description}
 		</div>
 		<div class="flex justify-end">
-			<button class="btn btn-s mr-2 bg-[#121212] border-0 hover:bg-[#090909]">
-				<img src={link} alt="edit" class="h-6 cursor-pointer" />
-			</button>
+			{#if linkFeedback}
+				<div class="tooltip tooltip-open mr-2" data-tip="Link copied to clipboard">
+					<button class="btn btn-s bg-[#121212] border-0 hover:bg-[#090909]">
+						<img src={link} alt="edit" class="h-6 cursor-pointer" />
+					</button>
+				</div>
+			{:else}
+				<button
+					class="btn btn-s bg-[#121212] border-0 mr-2 hover:bg-[#090909]"
+					onclick={linkFeedbackHandler}
+				>
+					<img src={link} alt="edit" class="h-6 cursor-pointer" />
+				</button>
+			{/if}
+
 			<button
 				class="btn btn-s bg-[#121212] border-0 hover:bg-[#090909]"
 				onclick={() => {
