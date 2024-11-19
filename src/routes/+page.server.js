@@ -61,5 +61,5 @@ export const actions = {
                 error: error
             }
         }
-    }
+    },
 };

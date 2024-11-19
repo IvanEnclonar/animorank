@@ -10,9 +10,32 @@
 	let { pset } = $props();
 	let togglebttn = $state(false);
 	let openEdit = $state(false);
+	let loading = $state(false);
+	/**
+	 * @type {any[]}
+	 */
+	let problems = $state([]);
+
+	const loadPsetProblems = async () => {
+		// fetch problems
+		loading = true;
+		const response = await fetch('/api/problems', {
+			method: 'POST',
+			body: JSON.stringify({ psetId: pset.id }),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+
+		const res = await response.json();
+		res.data.forEach((/** @type {any} */ i) => {
+			problems.push(i);
+		});
+		loading = false;
+	};
 </script>
 
-{#if openEdit}
+{#if openEdit && !loading}
 	<div class="w-full mt-8 min-h-72 p-3 bg-[#1F1F1F] rounded cursor-pointer flex flex-wrap">
 		<h2 class="text-2xl mb-4 w-full">{pset.title}</h2>
 		<div class="px-3 pb-10 w-full">
@@ -35,60 +58,26 @@
 					</div>
 				</div>
 				<div>
-					<div class="flex justify-between p-2 align-middle text-center">
-						<h3 class="mt-auto mb-auto ml-4">Two Sum</h3>
-						<div class="flex">
-							<div class=" grid place-items-center">
-								<input
-									type="checkbox"
-									class="toggle toggle-md toggle-accent checked:bg-[#1f845a]"
-									bind:checked={togglebttn}
-								/>
+					{#each problems as problem}
+						<div class="flex justify-between p-2 align-middle text-center">
+							<h3 class="mt-auto mb-auto ml-4">{problem.problem_name}</h3>
+							<div class="flex">
+								<div class=" grid place-items-center">
+									<input
+										type="checkbox"
+										class="toggle toggle-md toggle-accent checked:bg-[#1f845a]"
+										bind:checked={togglebttn}
+									/>
+								</div>
+								<button class="btn btn-s ml-2 bg-[#121212] border-0 hover:bg-[#090909]">
+									<img src={edit} alt="edit" class="h-4 cursor-pointer" />
+								</button>
+								<button class="btn btn-s ml-2 bg-[#121212] border-0 hover:bg-[#090909]">
+									<img src={statistics} alt="statistics" class="h-5 cursor-pointer" />
+								</button>
 							</div>
-							<button class="btn btn-s ml-2 bg-[#121212] border-0 hover:bg-[#090909]">
-								<img src={edit} alt="edit" class="h-4 cursor-pointer" />
-							</button>
-							<button class="btn btn-s ml-2 bg-[#121212] border-0 hover:bg-[#090909]">
-								<img src={statistics} alt="statistics" class="h-5 cursor-pointer" />
-							</button>
 						</div>
-					</div>
-					<div class="flex justify-between p-2 align-middle text-center">
-						<h3 class="mt-auto mb-auto ml-4">Linear Search</h3>
-						<div class="flex">
-							<div class=" grid place-items-center">
-								<input
-									type="checkbox"
-									class="toggle toggle-md toggle-accent checked:bg-[#1f845a]"
-									bind:checked={togglebttn}
-								/>
-							</div>
-							<button class="btn btn-s ml-2 bg-[#121212] border-0 hover:bg-[#090909]">
-								<img src={edit} alt="edit" class="h-4 cursor-pointer" />
-							</button>
-							<button class="btn btn-s ml-2 bg-[#121212] border-0 hover:bg-[#090909]">
-								<img src={statistics} alt="statistics" class="h-5 cursor-pointer" />
-							</button>
-						</div>
-					</div>
-					<div class="flex justify-between p-2 align-middle text-center">
-						<h3 class="mt-auto mb-auto ml-4">Valid Parentheses</h3>
-						<div class="flex">
-							<div class=" grid place-items-center">
-								<input
-									type="checkbox"
-									class="toggle toggle-md toggle-accent checked:bg-[#1f845a]"
-									bind:checked={togglebttn}
-								/>
-							</div>
-							<button class="btn btn-s ml-2 bg-[#121212] border-0 hover:bg-[#090909]">
-								<img src={edit} alt="edit" class="h-4 cursor-pointer" />
-							</button>
-							<button class="btn btn-s ml-2 bg-[#121212] border-0 hover:bg-[#090909]">
-								<img src={statistics} alt="statistics" class="h-5 cursor-pointer" />
-							</button>
-						</div>
-					</div>
+					{/each}
 				</div>
 			</div>
 			<div class="mt-5 mb-5 w-full md:w-[600px]">
@@ -134,11 +123,19 @@
 			</button>
 			<button
 				class="btn btn-s bg-[#006239] border-0 hover:bg-[#004327]"
-				onclick={() => (openEdit = false)}
+				onclick={() => {
+					openEdit = false;
+				}}
 			>
 				<img src={done} alt="edit" class="h-6 cursor-pointer" />
 			</button>
 		</div>
+	</div>
+{:else if loading}
+	<div
+		class="mt-8 min-h-72 w-96 sm:mr-5 p-3 bg-[#1F1F1F] rounded cursor-pointer grid place-items-center"
+	>
+		<span class="loading loading-spinner loading-md"></span>
 	</div>
 {:else}
 	<div
@@ -154,7 +151,10 @@
 			</button>
 			<button
 				class="btn btn-s bg-[#121212] border-0 hover:bg-[#090909]"
-				onclick={() => (openEdit = true)}
+				onclick={() => {
+					openEdit = true;
+					loadPsetProblems();
+				}}
 			>
 				<img src={edit} alt="edit" class="h-6 cursor-pointer" />
 			</button>
