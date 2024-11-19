@@ -3,7 +3,27 @@
 
 	let { data } = $props();
 
-	console.log(data);
+	const subcribe = async () => {
+		const res = await fetch('/api/subscribe', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				problem_set: data.pset[0].id,
+				student_email: data.user.email,
+				status: 'pending'
+			})
+		});
+
+		console.log(res);
+
+		if (res.ok) {
+			console.log('Subscribed');
+		} else {
+			console.log('Failed to subscribe');
+		}
+	};
 </script>
 
 {#if data}
@@ -13,7 +33,15 @@
 				<div class="text-2xl">{data?.pset[0].title}</div>
 				<p class="indent-10 mt-5">{data?.pset[0].description}</p>
 				<div class="flex flex-row justify-end gap-3 mt-6">
-					<button class="btn bg-[#006239] text-white hover:bg-[#004327]"> Subscribe</button>
+					{#if data?.user?.role === 'student'}
+						<button class="btn bg-[#006239] text-white hover:bg-[#004327]" onclick={subcribe}
+							>Subscribe</button
+						>
+					{:else}
+						<button class="btn bg-[#006239] text-white hover:bg-[#004327]" disabled
+							>Subscribe</button
+						>
+					{/if}
 				</div>
 			</div>
 
