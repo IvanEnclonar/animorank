@@ -1,4 +1,3 @@
-import { supabase } from "$lib/supabaseClient";
 import { redirect } from '@sveltejs/kit';
 import { OAuth2Client } from 'google-auth-library';
 import { SECRET_CLIENT_ID, SECRET_CLIENT_SECRET } from '$env/static/private';
@@ -23,16 +22,3 @@ export const actions = {
         return redirect(302, authUrl);
     }
 };
-
-export async function load({ params }) {
-    console.log(params.slug); // Use params instead of page store
-    let { data: Problem, error } = await supabase
-        .from('Problem')
-        .select("*")
-        .eq("id", Number(params.slug))
-
-    return {
-        Problem: Problem,
-        error: error
-    }
-}

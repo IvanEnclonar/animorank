@@ -1,18 +1,11 @@
-<script lang="ts">
+<script lang>
 	import loader from '@monaco-editor/loader';
 	import { onDestroy, onMount } from 'svelte';
-	import type * as Monaco from 'monaco-editor/esm/vs/editor/editor.api';
 	import { restoreHistory, updateHistory } from '$lib/history';
 
 	// export const setValue = () => {
 	// 	value = editor.getValue();
 	// };
-
-	type Props = {
-		value?: string;
-		setValue?: () => void;
-		problem?: any;
-	};
 
 	let {
 		value = $bindable('#include<stdio.h>\n\nint main(){ \n\n  return 0;\n}'),
@@ -20,11 +13,14 @@
 			value = editor.getValue();
 		}),
 		problem = $bindable()
-	}: Props = $props();
+	} = $props();
 
-	let editor: Monaco.editor.IStandaloneCodeEditor;
-	let monaco: typeof Monaco;
-	let editorContainer: HTMLElement | undefined = $state();
+	/**
+	 * @type {import("monaco-editor").editor.IStandaloneCodeEditor}
+	 */
+	let editor;
+	let monaco;
+	let editorContainer = $state();
 
 	let mounted = false;
 	let totalSize = 0.0;
@@ -96,6 +92,10 @@
 
 		mounted = true;
 	});
+
+	export const getValue = () => {
+		return editor.getValue();
+	};
 </script>
 
 <div class="grow shadow-inner border-t-2 overflow-hidden">

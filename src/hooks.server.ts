@@ -7,6 +7,7 @@ import type { JwtPayload } from 'jsonwebtoken';
 export const handle: Handle = async ({ event, resolve }) => {
     const requestedPath = event.url.pathname;
     const cookies = event.cookies;
+    const protectedRoutes = ["/edit", "/"]
 
     // Auth check
     const token = cookies.get("token");
@@ -23,7 +24,11 @@ export const handle: Handle = async ({ event, resolve }) => {
     }
 
     const response = await resolve(event);
-    // This is where you protect routes
+
+    if (protectedRoutes.includes(requestedPath) && !event.locals.user) {
+        throw redirect(303, "/about")
+    }
+
     return response;
 };
 
