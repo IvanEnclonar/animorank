@@ -25,7 +25,6 @@ export const actions = {
 };
 
 export async function load({ params }) {
-    console.log(params.slug); // Use params instead of page store
     let { data: Problem, error } = await supabase
         .from('Problem')
         .select("*")

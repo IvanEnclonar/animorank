@@ -4,6 +4,7 @@ import { SECRET_CLIENT_ID, SECRET_CLIENT_SECRET } from '$env/static/private';
 import { supabase } from "$lib/supabaseClient";
 
 export const load = async ({ locals }) => {
+    if (locals.user.role === 'teacher') {
     const { data, error } = await supabase
         .from('Problem_set')
         .select('*')
@@ -12,6 +13,22 @@ export const load = async ({ locals }) => {
     return {
         psets: data,
     };
+    } else if (locals.user.role === 'student') {
+    const { data, error } = await supabase
+        .from('Problem_set')
+        .select('title, description, Problem ( id, problem_name)')
+        .eq('is_global', true);
+    
+    return {
+        psets: data,
+    };
+    }
+    else {
+    return {
+        psets: [],
+    };
+    }
+
 }
 
 export const actions = {
@@ -40,7 +57,8 @@ export const actions = {
             title: formData.get('title'),
             description: formData.get('description'),
             owner_email: formData.get('owner_email'),
-            auto_accept: formData.get('auto_accept') === 'on' ? true : false
+            auto_accept: formData.get('auto_accept') === 'on' ? true : false,
+            is_global: formData.get('is_global') === 'on' ? true : false,
         };
 
         // Check if input is valid

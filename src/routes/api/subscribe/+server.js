@@ -8,13 +8,13 @@ export const POST = async ({ request }) => {
 
     const { data, error } = await supabase
         .from('Subscription')
-        .insert([
+        .upsert([
             {
                 student_email: body.student_email,
                 problem_set: body.problem_set,
                 status: 'pending',
             }
-        ]);
+        ], { onConflict: 'email' });
 
     return json({
         data: data,

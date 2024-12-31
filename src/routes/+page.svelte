@@ -38,12 +38,14 @@
 {:else if data.user?.role === 'student'}
 	<div class="w-screen bg-[#121212]">
 		<div class="mt-12 px-3 flex justify-between">
-			<h2 class="font-arial text-2xl">Dashboard</h2>
+			<h2 class="font-arial text-2xl">Problems</h2>
 		</div>
 		<div class="flex flex-row flex-wrap justify-start w-8.5/10 mx-auto">
-			<StudentPSBox />
-			<StudentPSBox />
-			<StudentPSBox />
+			{#if data.psets}
+				{#each data.psets as pset}
+					<StudentPSBox title={pset.title} Problems={pset.Problem} />
+				{/each}
+			{/if}
 		</div>
 	</div>
 {:else}
