@@ -14,12 +14,10 @@
 
 	let leftWidth = $derived(innerWidth / 2 + offset);
 	let rightWidth = $derived(innerWidth - leftWidth);
-	let problemBody = $derived(problem.body);
-
-	let value = $state(problem.starter_code);
+	let problemBody = $state(undefined);
+	let value = $state(undefined);
 
 	let setValue: () => void = $state(() => {});
-
 	//this function sends a post request to the api.
 	const handleSubmit = async () => {
 		setValue();
@@ -43,12 +41,19 @@
 	const resetResize = () => {
 		offset = 0;
 	};
+
+	$effect( () => {
+		problemBody = problem.body;
+		value = problem.starter_code;
+	})
+
 </script>
 
 <svelte:window onmouseup={abortResize} bind:innerWidth />
 
 <!--Use grow class on your divs if you want no scroll bar, otherwise the content will just overflow all good-->
 <div class="flex justify-start grow overflow-auto relative">
+	{#if problemBody && value}
 	<div class=" pl-5 pt-5 pr-3 pb-10 overflow-auto" style={`width : ${leftWidth}px`}>
 		<div
 			class="prose prose-headings:text-white prose-p:text-white prose-a:text-blue-500 prose-code:text-white prose-code:bg-gray-700 prose-code:rounded prose-code:px-1 prose-code:font-normal"
@@ -78,4 +83,5 @@
 
 		<CodeEditor bind:value bind:setValue bind:problem />
 	</div>
+	{/if}
 </div>
