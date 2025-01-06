@@ -22,7 +22,7 @@
 	let monaco;
 	let editorContainer = $state();
 
-	let mounted = false;
+	let mounted = $state(false);
 	let totalSize = 0.0;
 
 	onMount(async () => {
@@ -98,6 +98,10 @@
 	};
 </script>
 
-<div class="grow shadow-inner border-t-2 overflow-hidden">
-	<div class="w-full h-full" bind:this={editorContainer}></div>
+<div class="grow shadow-inner border-t-2 overflow-clip">
+	<div class="w-full h-full {!mounted && "bg-[#1f1f1f]"}" bind:this={editorContainer}>
+		{#if !mounted}
+			<p class="content-center">loading editor...</p>
+		{/if}
+	</div>
 </div>

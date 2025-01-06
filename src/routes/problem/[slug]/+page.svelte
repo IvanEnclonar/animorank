@@ -71,9 +71,10 @@
 		<button class="w-full" title="reset sizing" onclick={resetResize}> | </button>
 	</div>
 
-	<div class="flex flex-col" style={`width : ${rightWidth}px`}>
-		<span class="flex items-end justify-between gap-3 px-3 w-full pt-1 pb-2 grow">
-			<div class="self-center justify-self-center">code.c</div>
+	
+	<div class="flex flex-col h-full pt-2 pb-2" style={`width : ${rightWidth}px`}>
+		<span class="flex items-end justify-between gap-3 px-3 max-h-fit w-full pt-1 pb-2 grow">
+			<div class="self-center justify-self-centert">code.c</div>
 
 			<div class="flex gap-3">
 				<button class="btn" onclick={handleSubmit}> Run </button>
