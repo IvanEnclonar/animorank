@@ -3,6 +3,7 @@
 	import CodeEditor from '$lib/components/CodeEditor.svelte';
 	import Editor from '$lib/components/Editor.svelte';
 	import edit from 'svelte-awesome/icons/edit';
+	import { goto } from '$app/navigation';
 
 	let innerWidth = $state(0); //gets the width of the page
 	let offset = $state(0); //offset state, determines how much more pixels should be taken by the right panel.
@@ -46,6 +47,12 @@
 			method: 'POST',
 			body: formData
 		});
+
+		if (res.ok) {
+			goto('/');
+		} else {
+			alert('Problem creation failed');
+		}
 	};
 </script>
 

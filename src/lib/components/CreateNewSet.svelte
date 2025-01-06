@@ -5,6 +5,7 @@
 	/** @type {{closeModal: any, show?: boolean, email: string}} */
 	let { closeModal, show = false, email } = $props();
 	let AccessibleWithLink = $state(false);
+	let GlobalAccess = $state(false);
 </script>
 
 <Modal {show} {closeModal}>
@@ -30,6 +31,15 @@
 					class="checkbox"
 					bind:checked={AccessibleWithLink}
 					name="auto_accept"
+				/>
+			</label>
+			<label class="label cursor-pointer">
+				<span class="label-text">Global Access</span> 
+				<input
+					type="checkbox"
+					class="checkbox"
+					bind:checked={GlobalAccess}
+					name="is_global"
 				/>
 			</label>
 		</div>
