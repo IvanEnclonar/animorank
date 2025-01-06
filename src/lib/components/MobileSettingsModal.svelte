@@ -1,11 +1,18 @@
 <script>
 	/** @type {{openSettings: any, user: any}} */
 	let { openSettings = $bindable(), user } = $props();
+	import { goto } from '$app/navigation';
 
 	const logout = async () => {
 		//remove cookies and refresh
 		document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 		window.location.reload();
+	};
+
+	const about = () => {
+		openSettings = false;
+		//navigate to about page
+		goto('/about');
 	};
 </script>
 
@@ -16,8 +23,8 @@
 		</div>
 		<h2 class="mb-10">{user.email}</h2>
 		<button class="mb-2 underline cursor-pointer" onclick={logout}>Logout</button>
-		<button class="mb-2 underline cursor-pointer">About</button>
-		<button class="mb-2 underline cursor-pointer">Support</button>
+		<button class="mb-2 underline cursor-pointer" onclick={about}>About</button>
+		<a class="mb-2 underline cursor-pointer" href="https://forms.gle/uDpnjEoYkyjHZsWVA" target="_blank">Feedback</a>
 		<button
 			class="btn mt-4 btn-square btn-ghost"
 			onclick={() => (openSettings = false)}
