@@ -27,8 +27,10 @@
 	//start resize, called when the mouse is held down on the resize bar. assigns a listener on mousemove which modifies the offset state.
 	const startResize = (e: MouseEvent) => {
 		let initial = e.clientX;
+		let initialOffSet = offset;
 		document.onmousemove = (e) => {
-			offset -= leftWidth - e.clientX;
+			const delta = initial - e.clientX;
+			offset = initialOffSet - delta;
 		};
 	};
 
