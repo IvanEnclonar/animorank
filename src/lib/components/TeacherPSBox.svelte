@@ -26,7 +26,7 @@
 		loading = true;
 		const response = await fetch('/api/problems', {
 			method: 'POST',
-			body: JSON.stringify({ psetId: pset.id }),
+			body: JSON.stringify({ psetId: pset.id, action: 'getPSETProblems' }),
 			headers: {
 				'content-type': 'application/json'
 			}
@@ -45,6 +45,20 @@
 		setTimeout(() => {
 			linkFeedback = false;
 		}, 2000);
+	};
+
+	// @ts-ignore
+	const toggleVisibility = async (id, value) => {
+		// fetch problems
+		const response = await fetch('/api/problems', {
+			method: 'POST',
+			body: JSON.stringify({ action: 'updateProblemVisibility', visible: value, id: id, }),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+
+		const res = await response.json();
 	};
 </script>
 
@@ -81,11 +95,15 @@
 						<div class="flex justify-between p-2 align-middle text-center">
 							<h3 class="mt-auto mb-auto ml-4">{problem.problem_name}</h3>
 							<div class="flex">
-								<label class="swap">
-									<input type="checkbox" bind:checked={togglebttn} />
-									<img src={hidden} alt="hidden" class="swap-off h-9 cursor-pointer" />
-									<img src={visible} alt="visible" class="swap-on h-9 cursor-pointer" />
-								</label>
+								<div class="grid place-items-center">
+									<div class="tooltip tooltip-bottom m-0 p-0" data-tip={problem.visible ? 'Visible to students' : 'Hidden to students'}>
+										<label class="swap swap-rotate">
+												<input type="checkbox" bind:checked={problem.visible} onclick={() => toggleVisibility(problem.id, !problem.visible)} />
+												<img src={hidden} alt="hidden" class="h-9 cursor-pointer swap-off" />
+												<img src={visible} alt="visible" class="h-9 cursor-pointer swap-on" />
+										</label>
+									</div>
+								</div>
 								<button class="btn btn-s ml-2 bg-[#121212] border-0 hover:bg-[#090909]">
 									<img src={edit} alt="edit" class="h-4 cursor-pointer" />
 								</button>

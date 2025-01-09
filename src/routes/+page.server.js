@@ -13,11 +13,12 @@ export const load = async ({ locals }) => {
     return {
         psets: data,
     };
-    } else if (locals.user.role === 'student') {
+    } else if (locals.user.role === 'student') {    
     const { data, error } = await supabase
         .from('Problem_set')
-        .select('title, description, Problem ( id, problem_name)')
-        .eq('is_global', true);
+        .select('title, description, Problem (id, problem_name, visible)')
+        .eq('is_global', true)
+        .eq('Problem.visible', true);   
     
     return {
         psets: data,

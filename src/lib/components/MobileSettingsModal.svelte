@@ -17,7 +17,7 @@
 </script>
 
 <div class="fixed grid place-items-center w-full h-full">
-	<div class="shadow-xl w-96 p-8 flex flex-col justify-center items-center z-10">
+	<div class="w-96 p-8 flex flex-col justify-center items-center z-10">
 		<div class="grid place-items-center w-48 h-48 bg-gray-100 rounded-full mb-2 overflow-hidden">
 			<img src={user.picture} alt="profile" class="w-full h-full rounded-full" />
 		</div>
@@ -50,7 +50,7 @@
 		onclick={() => {
 			openSettings = false;
 		}}
-		class="bg-black/75 absolute w-full h-full z-2"
+		class="absolute w-full h-full z-100 bg-black opacity-50"
 		aria-label="Close"
 	>
 	</button>
