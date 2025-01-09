@@ -58,8 +58,8 @@ export const actions = {
             description: formData.get('description'),
             owner_email: formData.get('owner_email'),
             auto_accept: formData.get('auto_accept') === 'on' ? true : false,
-            is_global: formData.get('is_global') === 'on' ? true : false,
-        };
+            is_global: formData.get('is_private') === 'on' ? false : true,
+        };  
 
         // Check if input is valid
         if (!input.title || !input.description || !input.owner_email) {

@@ -5,7 +5,7 @@
 	/** @type {{closeModal: any, show?: boolean, email: string}} */
 	let { closeModal, show = false, email } = $props();
 	let AccessibleWithLink = $state(false);
-	let GlobalAccess = $state(false);
+	let Private = $state(false);
 </script>
 
 <Modal {show} {closeModal}>
@@ -25,6 +25,17 @@
 		></textarea>
 		<div class="form-control">
 			<label class="label cursor-pointer">
+				<span class="label-text">Private</span>
+				
+				<input
+					type="checkbox"
+					class="checkbox"
+					bind:checked={Private}
+					name="is_private"
+				/>
+			</label>
+			{#if Private}
+			<label class="label cursor-pointer">
 				<span class="label-text">Auto Accept Students</span>
 				<input
 					type="checkbox"
@@ -33,15 +44,13 @@
 					name="auto_accept"
 				/>
 			</label>
-			<label class="label cursor-pointer">
-				<span class="label-text">Global Access</span> 
+			{:else}
 				<input
-					type="checkbox"
-					class="checkbox"
-					bind:checked={GlobalAccess}
-					name="is_global"
+					type="hidden"
+					value={false}
+					name="auto_accept"
 				/>
-			</label>
+			{/if}
 		</div>
 		<div class="flex justify-end mt-5">
 			<button class="btn btn-s bg-[#006239] border-0 hover:bg-[#004327]" type="submit">
