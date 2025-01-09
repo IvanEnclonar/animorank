@@ -12,8 +12,6 @@ export const POST = async (event) => {
         ],
     }
 
-    console.log(response)
-
     const res = await fetch("https://emkc.org/api/v2/piston/execute", {method: "POST", headers:{ "Content-Type": "application/json"}, body: JSON.stringify(response)})
 
     const print = await res.json()
