@@ -11,6 +11,7 @@
 
 	let showCreatePSetModal = $state(false);
 	let { data } = $props();
+	$inspect(data);
 </script>
 
 {#if data.user?.role === 'teacher'}
@@ -43,7 +44,9 @@
 		<div class="flex flex-row flex-wrap justify-start w-8.5/10 mx-auto">
 			{#if data.psets}
 				{#each data.psets as pset}
+					{#if pset.Problem.length > 0}
 					<StudentPSBox title={pset.title} Problems={pset.Problem} />
+					{/if}
 				{/each}
 			{/if}
 		</div>

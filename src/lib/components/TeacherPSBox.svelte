@@ -85,9 +85,6 @@
 						>
 							Add Problem
 						</a>
-						<button class="btn btn-ghost btn-xs"
-							><img src={dropdown} alt="dropdown" class="h-7 cursor-pointer" />
-						</button>
 					</div>
 				</div>
 				<div>
