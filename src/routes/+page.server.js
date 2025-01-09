@@ -13,11 +13,12 @@ export const load = async ({ locals }) => {
     return {
         psets: data,
     };
-    } else if (locals.user.role === 'student') {
+    } else if (locals.user.role === 'student') {    
     const { data, error } = await supabase
         .from('Problem_set')
-        .select('title, description, Problem ( id, problem_name)')
-        .eq('is_global', true);
+        .select('title, description, Problem (id, problem_name, visible)')
+        .eq('is_global', true)
+        .eq('Problem.visible', true);   
     
     return {
         psets: data,
@@ -58,8 +59,8 @@ export const actions = {
             description: formData.get('description'),
             owner_email: formData.get('owner_email'),
             auto_accept: formData.get('auto_accept') === 'on' ? true : false,
-            is_global: formData.get('is_global') === 'on' ? true : false,
-        };
+            is_global: formData.get('is_private') === 'on' ? false : true,
+        };  
 
         // Check if input is valid
         if (!input.title || !input.description || !input.owner_email) {
