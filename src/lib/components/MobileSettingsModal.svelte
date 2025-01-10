@@ -50,7 +50,7 @@
 		onclick={() => {
 			openSettings = false;
 		}}
-		class="absolute w-full h-full z-100 bg-black opacity-50"
+		class="absolute w-full h-full z-100 bg-black opacity-80"
 		aria-label="Close"
 	>
 	</button>

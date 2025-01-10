@@ -9,8 +9,9 @@
 
 	let problem = $state(data.Problem?.[0] ?? {});
 	let innerWidth: number = $state(0); //gets the width of the page
-
-	let offset = $state(0); //offset state, determines how much more pixels should be taken by the right panel.
+	let toggleConsole: boolean = $state(false); //toggles the console
+	let offset = $state(0); //offset state, determines how much more pixels should be taken by the right panel.	
+	let consoleContent = $state([]); //console content
 
 	let leftWidth = $derived(innerWidth / 2 + offset);
 	let rightWidth = $derived(innerWidth - leftWidth);
@@ -21,7 +22,14 @@
 	//this function sends a post request to the api.
 	const handleSubmit = async () => {
 		setValue();
-		const res = await fetch('/api', { method: 'POST', body: JSON.stringify(value) });
+		const res = await fetch('/api/compile', { method: 'POST', body: JSON.stringify(value) });
+		const data = await res.json();
+
+		let now = new Date();
+		let timeString = now.toLocaleTimeString();
+		let output = timeString + ' : ' + data.run.output;
+		// @ts-ignore
+		consoleContent = [...consoleContent, output];
 	};
 
 	//start resize, called when the mouse is held down on the resize bar. assigns a listener on mousemove which modifies the offset state.
@@ -82,6 +90,17 @@
 		</span>
 
 		<CodeEditor bind:value bind:setValue bind:problem />
+		
+		<span class={ toggleConsole ? 'w-full h-56 overflow-y-auto' : 'w-full overflow-y-auto' }>
+			<div class="h-4 bg-black/30 flex flex-row items-center justify-center p-2" ><button class="text-xs cursor-pointer" onclick={() => { toggleConsole=!toggleConsole}}>{toggleConsole ? 'Close Console' : 'Open Console'}</button></div>
+			{#if toggleConsole}
+				{#each consoleContent as line}
+				<div class="h-4 px-2 pt-3 pb-3">
+					<p class="text-xs">{line}</p>
+				</div>
+				{/each}
+			{/if}
+		</span>
 	</div>
 	{/if}
 </div>
