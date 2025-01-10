@@ -13,7 +13,7 @@
 		handleReset = $bindable(),
 	} = $props();
 
-	$inspect(value);
+
 	/**
 	 * @type {import("monaco-editor").editor.IStandaloneCodeEditor}
 	 */
@@ -21,11 +21,12 @@
 	let monaco;
 	let editorContainer = $state();
 
+
 	let mounted = false;
 	let totalSize = 0.0;
 
 	handleReset = () => {
-		clearHistory(problem.problem_name);
+		clearHistory(problem.id);
 		if(editor){
 			editor.setValue(problem.starter_code);
 		}
@@ -34,7 +35,7 @@
 
 	onMount(async () => {
 		//restore user history
-		value = restoreHistory(problem.problem_name, value);
+		value = restoreHistory(problem.id, value);
 
 		// Remove the next two lines to load the monaco editor from a CDN
 		// see https://www.npmjs.com/package/@monaco-editor/loader#config
@@ -87,7 +88,6 @@
 				e.changes[0].rangeOffset,
 				Date.now()
 			];
-			console.log(JSON.stringify(change));
 			/*
             const size = new TextEncoder().encode(JSON.stringify(change)).length
             const kiloBytes = size / 1024;
@@ -95,7 +95,7 @@
             console.log("total size of history (MB): " + (totalSize / 1000))
             */
 		    value = editor.getValue()
-			updateHistory(problem.problem_name, JSON.stringify(change));
+			updateHistory(problem.id, JSON.stringify(change));
 		});
 
 		mounted = true;

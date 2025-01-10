@@ -24,11 +24,15 @@ export const actions = {
     }
 };
 
-export async function load({ params }) {
+export async function load({ params, locals }) {
+    // Update the load function
+    let user = locals.user;
+
     let { data: Problem, error } = await supabase
         .from('Problem')
-        .select("*")
+        .select("*, Session(*)")
         .eq("id", Number(params.slug))
+        .eq("Session.student_email", user.email);
 
     return {
         Problem: Problem,
