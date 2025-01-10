@@ -18,10 +18,8 @@
 	let problemBody = $state(undefined);
 	let value = $state(undefined);
 
-	let setValue: () => void = $state(() => {});
 	//this function sends a post request to the api.
 	const handleSubmit = async () => {
-		setValue();
 		const res = await fetch('/api/compile', { method: 'POST', body: JSON.stringify(value) });
 		const data = await res.json();
 
@@ -89,7 +87,7 @@
 			</div>
 		</span>
 
-		<CodeEditor bind:value bind:setValue bind:problem />
+		<CodeEditor bind:value bind:problem />
 		
 		<span class={ toggleConsole ? 'w-full h-56 overflow-y-auto' : 'w-full overflow-y-auto' }>
 			<div class="h-4 bg-black/30 flex flex-row items-center justify-center p-2" ><button class="text-xs cursor-pointer" onclick={() => { toggleConsole=!toggleConsole}}>{toggleConsole ? 'Close Console' : 'Open Console'}</button></div>

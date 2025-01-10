@@ -9,9 +9,6 @@
 
 	let {
 		value = $bindable('#include<stdio.h>\n\nint main(){ \n\n  return 0;\n}'),
-		setValue = $bindable(() => {
-			value = editor.getValue();
-		}),
 		problem = $bindable()
 	} = $props();
 
@@ -87,15 +84,13 @@
             totalSize += kiloBytes
             console.log("total size of history (MB): " + (totalSize / 1000))
             */
+		    value = editor.getValue()
 			updateHistory(problem, JSON.stringify(change));
 		});
 
 		mounted = true;
 	});
 
-	export const getValue = () => {
-		return editor.getValue();
-	};
 </script>
 
 <div class="grow shadow-inner border-t-2 overflow-hidden">
