@@ -15,15 +15,13 @@
 
 	let leftWidth = $derived(innerWidth / 2 + offset);
 	let rightWidth = $derived(innerWidth - leftWidth);
-	let problemBody = $derived(problem.body);
+	let problemBody = $state(undefined);
+	let value = $state(undefined);
+	let handleReset : () => void = $state(() => {});
 
-	let value = $state(data.Problem?.[0].starter_code ?? '');
-	$inspect(value);
-	let setValue: () => void = $state(() => {});
 
 	//this function sends a post request to the api.
 	const handleSubmit = async () => {
-		setValue();
 		const res = await fetch('/api/compile', { method: 'POST', body: JSON.stringify(value) });
 		const data = await res.json();
 
@@ -51,12 +49,20 @@
 	const resetResize = () => {
 		offset = 0;
 	};
+
+
+	$effect( () => {
+		problemBody = problem.body;
+		value = problem.starter_code;
+	})
+
 </script>
 
 <svelte:window onmouseup={abortResize} bind:innerWidth />
 
 <!--Use grow class on your divs if you want no scroll bar, otherwise the content will just overflow all good-->
 <div class="flex justify-start grow overflow-auto relative">
+	{#if problemBody && value}
 	<div class=" pl-5 pt-5 pr-3 pb-10 overflow-auto" style={`width : ${leftWidth}px`}>
 		<div
 			class="prose prose-headings:text-white prose-p:text-white prose-a:text-blue-500 prose-code:text-white prose-code:bg-gray-700 prose-code:rounded prose-code:px-1 prose-code:font-normal"
@@ -79,12 +85,13 @@
 			<div class="self-center justify-self-center">code.c</div>
 
 			<div class="flex gap-3">
+				<button class="btn" onclick={handleReset}> Reset Code </button>
 				<button class="btn" onclick={handleSubmit}> Run </button>
 				<button class="btn bg-primary text-white"> Submit </button>
 			</div>
 		</span>
 
-		<CodeEditor bind:value bind:setValue bind:problem />
+		<CodeEditor bind:value bind:problem bind:handleReset/>
 		
 		<span class={ toggleConsole ? 'w-full h-56 overflow-y-auto' : 'w-full overflow-y-auto' }>
 			<div class="h-4 bg-black/30 flex flex-row items-center justify-center p-2" ><button class="text-xs cursor-pointer" onclick={() => { toggleConsole=!toggleConsole}}>{toggleConsole ? 'Close Console' : 'Open Console'}</button></div>
@@ -97,4 +104,5 @@
 			{/if}
 		</span>
 	</div>
+	{/if}
 </div>
