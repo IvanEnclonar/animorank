@@ -8,13 +8,14 @@
 	// };
 
 	let {
-		value = $bindable('#include<stdio.h>\n\nint main(){ \n\n  return 0;\n}'),
+		value = $bindable(),
 		setValue = $bindable(() => {
 			value = editor.getValue();
 		}),
 		problem = $bindable()
 	} = $props();
 
+	$inspect(value);
 	/**
 	 * @type {import("monaco-editor").editor.IStandaloneCodeEditor}
 	 */

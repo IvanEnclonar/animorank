@@ -17,8 +17,8 @@
 	let rightWidth = $derived(innerWidth - leftWidth);
 	let problemBody = $derived(problem.body);
 
-	let value = $state(problem.starter_code);
-
+	let value = $state(data.Problem?.[0].starter_code ?? '');
+	$inspect(value);
 	let setValue: () => void = $state(() => {});
 
 	//this function sends a post request to the api.

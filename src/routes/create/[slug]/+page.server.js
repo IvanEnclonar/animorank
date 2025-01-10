@@ -7,7 +7,7 @@ export const actions = {
         const input = {
             problem_name: formData.get('title'),
             body: formData.get('description'),
-            goal_output: formData.get('requiredOutput'),
+            test_function: formData.get('test_function'),
             starter_code: formData.get('starterCode'),
             problem_set: slug,
             lang: "C",
