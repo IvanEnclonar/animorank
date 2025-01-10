@@ -13,6 +13,7 @@
 		handleReset = $bindable(),
 	} = $props();
 
+	$inspect(value);
 	/**
 	 * @type {import("monaco-editor").editor.IStandaloneCodeEditor}
 	 */

@@ -11,9 +11,9 @@
 	let rightWidth = $derived(innerWidth - leftWidth);
 
 	let title = $state('');
-	let reuiredOutput = $state('');
 	let editorRef;
 	let codeEditorRef;
+	let testFunctionRef;
 
 	//start resize, called when the mouse is held down on the resize bar. assigns a listener on mousemove which modifies the offset state.
 	const startResize = (e) => {
@@ -36,11 +36,12 @@
 	const submit = async () => {
 		const description = editorRef.getContent();
 		const starterCode = codeEditorRef.getValue();
+		const testFunction = testFunctionRef.getValue();
 
 		const formData = new FormData();
 		formData.append('title', title);
 		formData.append('description', description);
-		formData.append('requiredOutput', reuiredOutput);
+		formData.append('test_function', testFunction);
 		formData.append('starterCode', starterCode);
 
 		const res = await fetch('?/createProblem', {
@@ -78,13 +79,9 @@
 			</div>
 		</div>
 		<div class="w-9/10 m-auto mt-10">
-			<h2 class="text-2xl mb-3">Required output</h2>
-			<div class=" rounded-lg mt-3">
-				<textarea
-					class="textarea textarea-bordered w-full bg-inherit"
-					placeholder="Required Console Output"
-					bind:value={reuiredOutput}
-				></textarea>
+			<h2 class="text-2xl mb-3">Testing function</h2>
+			<div class="h-96 w-full border flex flex-col">
+				<CodeEditor bind:this={testFunctionRef} />
 			</div>
 		</div>
 	</div>
