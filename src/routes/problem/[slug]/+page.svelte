@@ -17,6 +17,7 @@
 	let rightWidth = $derived(innerWidth - leftWidth);
 	let problemBody = $state(undefined);
 	let value = $state(undefined);
+	let handleReset : () => void = $state(() => {});
 
 	//this function sends a post request to the api.
 	const handleSubmit = async () => {
@@ -47,6 +48,7 @@
 	const resetResize = () => {
 		offset = 0;
 	};
+
 
 	$effect( () => {
 		problemBody = problem.body;
@@ -82,12 +84,13 @@
 			<div class="self-center justify-self-center">code.c</div>
 
 			<div class="flex gap-3">
+				<button class="btn" onclick={handleReset}> Reset Code </button>
 				<button class="btn" onclick={handleSubmit}> Run </button>
 				<button class="btn bg-primary text-white"> Submit </button>
 			</div>
 		</span>
 
-		<CodeEditor bind:value bind:problem />
+		<CodeEditor bind:value bind:problem bind:handleReset/>
 		
 		<span class={ toggleConsole ? 'w-full h-56 overflow-y-auto' : 'w-full overflow-y-auto' }>
 			<div class="h-4 bg-black/30 flex flex-row items-center justify-center p-2" ><button class="text-xs cursor-pointer" onclick={() => { toggleConsole=!toggleConsole}}>{toggleConsole ? 'Close Console' : 'Open Console'}</button></div>

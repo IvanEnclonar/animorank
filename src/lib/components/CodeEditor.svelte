@@ -1,7 +1,7 @@
 <script lang>
 	import loader from '@monaco-editor/loader';
 	import { onDestroy, onMount } from 'svelte';
-	import { restoreHistory, updateHistory } from '$lib/history';
+	import { restoreHistory, updateHistory, clearHistory } from '$lib/history';
 
 	// export const setValue = () => {
 	// 	value = editor.getValue();
@@ -9,7 +9,8 @@
 
 	let {
 		value = $bindable('#include<stdio.h>\n\nint main(){ \n\n  return 0;\n}'),
-		problem = $bindable()
+		problem = $bindable(),
+		handleReset = $bindable(),
 	} = $props();
 
 	/**
@@ -22,9 +23,17 @@
 	let mounted = false;
 	let totalSize = 0.0;
 
+	handleReset = () => {
+		clearHistory(problem.problem_name);
+		if(editor){
+			editor.setValue(problem.starter_code);
+		}
+
+	}
+
 	onMount(async () => {
 		//restore user history
-		value = restoreHistory(problem, value);
+		value = restoreHistory(problem.problem_name, value);
 
 		// Remove the next two lines to load the monaco editor from a CDN
 		// see https://www.npmjs.com/package/@monaco-editor/loader#config
@@ -85,7 +94,7 @@
             console.log("total size of history (MB): " + (totalSize / 1000))
             */
 		    value = editor.getValue()
-			updateHistory(problem, JSON.stringify(change));
+			updateHistory(problem.problem_name, JSON.stringify(change));
 		});
 
 		mounted = true;
