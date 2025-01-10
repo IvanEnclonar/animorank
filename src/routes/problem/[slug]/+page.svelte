@@ -12,6 +12,7 @@
 	let toggleConsole: boolean = $state(false); //toggles the console
 	let offset = $state(0); //offset state, determines how much more pixels should be taken by the right panel.	
 	let consoleContent = $state([]); //console content
+	let unreadConsole = $state(false); //unread console content flag
 
 	let leftWidth = $derived(innerWidth / 2 + offset);
 	let rightWidth = $derived(innerWidth - leftWidth);
@@ -30,6 +31,10 @@
 		let output = timeString + ' : ' + data.run.output;
 		// @ts-ignore
 		consoleContent = [...consoleContent, output];
+
+		if (toggleConsole == false) {
+			unreadConsole = true;
+		}
 	};
 
 	//start resize, called when the mouse is held down on the resize bar. assigns a listener on mousemove which modifies the offset state.
@@ -86,23 +91,31 @@
 
 			<div class="flex gap-3">
 				<button class="btn" onclick={handleReset}> Reset Code </button>
-				<button class="btn" onclick={handleSubmit}> Run </button>
-				<button class="btn bg-primary text-white"> Submit </button>
+				<button class="btn bg-[#006239] text-white hover:bg-[#004327]" onclick={handleSubmit}> Run </button>
 			</div>
 		</span>
 
 		<CodeEditor bind:value bind:problem bind:handleReset/>
 		
-		<span class={ toggleConsole ? 'w-full h-56 overflow-y-auto' : 'w-full overflow-y-auto' }>
-			<div class="h-4 bg-black/30 flex flex-row items-center justify-center p-2" ><button class="text-xs cursor-pointer" onclick={() => { toggleConsole=!toggleConsole}}>{toggleConsole ? 'Close Console' : 'Open Console'}</button></div>
-			{#if toggleConsole}
-				{#each consoleContent as line}
-				<div class="h-4 px-2 pt-3 pb-3">
+
+		{#if toggleConsole}
+		<span class='w-full h-56 overflow-y-auto'>
+			<div class="h-4 bg-black/30 flex flex-row items-center justify-center p-2" ><button class="text-xs cursor-pointer" onclick={() => { toggleConsole=!toggleConsole}}>Close Console</button></div>
+			{#each consoleContent as line}
+				<div class="px-2 pt-1">
 					<p class="text-xs">{line}</p>
 				</div>
-				{/each}
-			{/if}
+			{/each}
 		</span>
+		{:else}
+		<span class='w-full'>
+			<div class=" bg-black/30 flex flex-row items-center justify-center " > 
+				<button class="text-xs cursor-pointer relative" onclick={() => { toggleConsole=!toggleConsole; unreadConsole=false}}>
+					Open Console {unreadConsole ? '🚨' : ''}
+				</button>
+			</div>
+		</span>
+		{/if}
 	</div>
 	{/if}
 </div>
