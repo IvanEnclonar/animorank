@@ -73,16 +73,28 @@
 	})
 
 	const runEveryFiveSeconds = async () =>{
+		let oldHistory = data.Problem[0].Session[0].history;
 		let history = localStorage.getItem(problem.id);
+		let combinedHistory = oldHistory;
+		if(history){
+			history = JSON.parse(history);
+			combinedHistory = [...oldHistory, ...(history || [])];
+		}
+
 		let body = {
 			id: problem.id,
-			history: history,
+			history: combinedHistory,
 			last_state: value,
 			student_email: data.user.email
 		}
 
 
 		const res = await fetch('/api/updateHistory', { method: 'POST', body: JSON.stringify(body) });
+		if(res.ok){
+			console.log('History Updated');
+		} else {
+			console.log('History Update Failed'); 
+		}
 	}
 
   	let interval: string | number | NodeJS.Timeout | undefined;
@@ -90,7 +102,7 @@
 	// Set up the interval when the component is mounted
 	onMount(() => {
 		localStorage.clear();
-		interval = setInterval(runEveryFiveSeconds, 5000); // Run every 5 seconds
+		interval = setInterval(runEveryFiveSeconds, 10000); // Run every 5 seconds
 	});
 
 	// Clean up the interval when the component is destroyed

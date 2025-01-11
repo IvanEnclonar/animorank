@@ -34,6 +34,14 @@ export async function load({ params, locals }) {
         .eq("id", Number(params.slug))
         .eq("Session.student_email", user.email);
 
+    // Check if session exists and replace starter code with it
+    if (Problem && Problem.length > 0) {
+        let session = Problem[0].Session[0];
+        if (session.last_state) {
+            Problem[0].starter_code = session.last_state;
+        }
+    }
+
     return {
         Problem: Problem,
         error: error

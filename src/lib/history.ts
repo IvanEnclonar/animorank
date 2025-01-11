@@ -21,7 +21,6 @@ export const restoreHistory = (problem : string, value : string) => {
 
         })
 
-        console.log(newVal)
         return newVal
     }
     return value
@@ -32,7 +31,6 @@ export const restoreHistory = (problem : string, value : string) => {
 export const updateHistory = (problem : string, newVal : string) => {
     if(browser){
         const history = JSON.parse(localStorage.getItem(problem) || '[]')
-        console.log(history)
         history.push(newVal)
         localStorage.setItem(problem, JSON.stringify(history))
     }
