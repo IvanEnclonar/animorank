@@ -73,7 +73,10 @@
 	})
 
 	const runEveryFiveSeconds = async () =>{
-		let oldHistory = data.Problem[0].Session[0].history;
+		let oldHistory = [];
+		if (data.Problem[0]?.Session.length > 0) {
+			oldHistory = data.Problem[0].Session[0].history;
+		}
 		let history = localStorage.getItem(problem.id);
 		let combinedHistory = oldHistory;
 		if(history){

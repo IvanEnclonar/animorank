@@ -1,5 +1,7 @@
 <script>
 	// @ts-nocheck
+	import close from '../../../lib/assets/close.svg';
+	import done from '../../../lib/assets/done.svg';
 	import CodeEditor from '$lib/components/CodeEditor.svelte';
 	import Editor from '$lib/components/Editor.svelte';
 	import edit from 'svelte-awesome/icons/edit';
@@ -12,8 +14,25 @@
 
 	let title = $state('');
 	let editorRef;
-	let codeEditorRef;
-	let testFunctionRef;
+	let codeEditorRef = $state('');
+	let codeEditorProblem = $state({
+		id: "createProblem",
+		starter_code: "int is_prime(int n) { \n // Write your code here \n}",
+	});
+
+	let testFunctionRef = $state('');
+	let testFunctionProblem = $state({
+		id: "createProblemTestFunction",
+		starter_code: '#include <stdio.h>\nint is_prime(int n) { if (n <= 1) return 0; for (int i = 2; i * i <= n; i++) { if (n % i == 0) return 0; } return 1; }\nint main() { int test_cases[5] = {2, 4, 17, 18, 29}; int expected_results[5] = {1, 0, 1, 0, 1}; for (int i = 0; i < 5; i++) { if (is_prime(test_cases[i]) != expected_results[i]) { printf("Test case %d failed.\\n", test_cases[i]); return 1; } } printf("All test cases passed.\\n"); return 0; }',
+	});
+
+	let toggleConsole = $state(false);
+	let consoleContent = $state([]);
+	let unreadConsole = $state(false);
+	let isPassed = $state(-1);
+
+	let handleReset = $state(() => {});
+
 
 	//start resize, called when the mouse is held down on the resize bar. assigns a listener on mousemove which modifies the offset state.
 	const startResize = (e) => {
@@ -33,16 +52,35 @@
 		offset = 0;
 	};
 
+	const runCode = async () => {
+		let toSubmit = testFunctionRef + '\n' + codeEditorRef;
+		const res = await fetch('/api/compile', { method: 'POST', body: JSON.stringify(toSubmit) });
+		const data = await res.json();
+
+		let now = new Date();
+		let timeString = now.toLocaleTimeString();
+		let output = timeString + ' : ' + data.run.output;
+		// @ts-ignore
+		consoleContent = [...consoleContent, output];
+		if(data.run.code == 0) {
+			isPassed = 0;
+		} else {
+			isPassed = 1;
+		}
+
+		if (toggleConsole == false) {
+			unreadConsole = true;
+		}
+	};
+
 	const submit = async () => {
 		const description = editorRef.getContent();
-		const starterCode = codeEditorRef.getValue();
-		const testFunction = testFunctionRef.getValue();
 
 		const formData = new FormData();
 		formData.append('title', title);
 		formData.append('description', description);
-		formData.append('test_function', testFunction);
-		formData.append('starterCode', starterCode);
+		formData.append('test_function', testFunctionRef);
+		formData.append('starterCode', codeEditorRef);
 
 		const res = await fetch('?/createProblem', {
 			method: 'POST',
@@ -81,7 +119,7 @@
 		<div class="w-9/10 m-auto mt-10">
 			<h2 class="text-2xl mb-3">Testing function</h2>
 			<div class="h-96 w-full border flex flex-col">
-				<CodeEditor bind:this={testFunctionRef} />
+				<CodeEditor bind:value={testFunctionRef} bind:problem={testFunctionProblem} bind:handleReset/>
 			</div>
 		</div>
 	</div>
@@ -100,13 +138,45 @@
 			<div class="self-center justify-self-center">Starter Code</div>
 
 			<div class="flex gap-3">
-				<button class="btn btn-outline border border-gray-700"> Run </button>
+				{#if isPassed == 1} 
+				<div class="grid place-items-center tooltip tooltip-bottom" data-tip="Test Cases Failed">
+					<div class="border-2 rounded-full grid place-items-center p-1">
+						<img src={close} alt="delete" class="h-4" />
+					</div>
+				</div>
+				{:else if isPassed == 0}
+				<div class="grid place-items-center tooltip tooltip-bottom" data-tip="Test Cases Passed">
+					<div class="border-2 rounded-full grid place-items-center p-1">
+						<img src={done} alt="delete" class="h-5" />
+					</div>
+				</div>
+				{/if}
+				<button class="btn btn-outline border border-gray-700" onclick={runCode}> Run </button>
 				<button class="btn bg-[#006239] text-white hover:bg-[#004327]" onclick={submit}>
 					Finish
 				</button>
 			</div>
 		</span>
 
-		<CodeEditor bind:this={codeEditorRef} />
+		<CodeEditor bind:value={codeEditorRef} bind:problem={codeEditorProblem} bind:handleReset/>
+
+		{#if toggleConsole}
+		<span class='w-full h-56 overflow-y-auto'>
+			<div class="h-4 bg-black/30 flex flex-row items-center justify-center p-2" ><button class="text-xs cursor-pointer" onclick={() => { toggleConsole=!toggleConsole}}>Close Console</button></div>
+			{#each consoleContent as line}
+				<div class="px-2 pt-1">
+					<p class="text-xs">{line}</p>
+				</div>
+			{/each}
+		</span>
+		{:else}
+		<span class='w-full'>
+			<div class=" bg-black/30 flex flex-row items-center justify-center " > 
+				<button class="text-xs cursor-pointer relative" onclick={() => { toggleConsole=!toggleConsole; unreadConsole=false}}>
+					Open Console {unreadConsole ? '🚨' : ''}
+				</button>
+			</div>
+		</span>
+		{/if}
 	</div>
 </div>

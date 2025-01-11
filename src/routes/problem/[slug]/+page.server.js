@@ -36,9 +36,12 @@ export async function load({ params, locals }) {
 
     // Check if session exists and replace starter code with it
     if (Problem && Problem.length > 0) {
-        let session = Problem[0].Session[0];
-        if (session.last_state) {
-            Problem[0].starter_code = session.last_state;
+        let problem = Problem[0];
+        if("Session" in problem) {
+            let session = problem.Session[0];
+            if(session?.last_state) {
+                problem.starter_code = session.last_state;
+            }
         }
     }
 
