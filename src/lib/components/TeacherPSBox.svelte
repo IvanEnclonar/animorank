@@ -197,7 +197,7 @@
 			{pset.description}
 		</div>
 		<div class="flex justify-end">
-			{#if linkFeedback}
+			<!-- {#if linkFeedback}
 				<div class="tooltip tooltip-open mr-2" data-tip="Link copied to clipboard">
 					<button class="btn btn-s bg-[#121212] border-0 hover:bg-[#090909]">
 						<img src={link} alt="edit" class="h-6 cursor-pointer" />
@@ -210,7 +210,7 @@
 				>
 					<img src={link} alt="edit" class="h-6 cursor-pointer" />
 				</button>
-			{/if}
+			{/if} -->
 
 			<button
 				class="btn btn-s bg-[#121212] border-0 hover:bg-[#090909]"

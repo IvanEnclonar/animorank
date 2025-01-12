@@ -25,7 +25,7 @@
 		></textarea>
 		<div class="form-control">
 			<label class="label cursor-pointer">
-				<span class="label-text">Private</span>
+				<span class="label-text">Private (alpha)</span>
 				
 				<input
 					type="checkbox"

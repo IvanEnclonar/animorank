@@ -12,20 +12,12 @@ export const POST = async (event) => {
         ],
     } 
 
-    console.log(body);
     const res = await fetch("https://emkc.org/api/v2/piston/execute", {method: "POST", headers:{ "Content-Type": "application/json"}, body: JSON.stringify(response)})
 
     const print = await res.json()
 
 
-    //compile code
-
-
-    //if compile error return error code
-
-    //if runtime error return runtime error 
-
-    //if code compiles, return result
+    console.log("PRINT", print);
 
     return new Response(JSON.stringify(print), {
         status: 200,
