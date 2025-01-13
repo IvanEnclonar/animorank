@@ -22,7 +22,7 @@
 	let editorContainer = $state();
 
 
-	let mounted = false;
+	let mounted = $state(false);
 	let totalSize = 0.0;
 
 	handleReset = () => {
@@ -35,6 +35,7 @@
 
 	onMount(async () => {
 		//restore user history
+		console.log('loaded')
 		value = restoreHistory(problem.id, value);
 
 		// Remove the next two lines to load the monaco editor from a CDN
@@ -94,7 +95,7 @@
             totalSize += kiloBytes
             console.log("total size of history (MB): " + (totalSize / 1000))
             */
-		    value = editor.getValue()
+		    value = editor.getValue();
 			updateHistory(problem.id, JSON.stringify(change));
 		});
 
@@ -103,6 +104,11 @@
 
 </script>
 
-<div class="grow shadow-inner border-t-2 overflow-hidden">
-	<div class="w-full h-full" bind:this={editorContainer}></div>
+
+<div class="grow shadow-inner border-t-2 overflow-clip">
+	<div class="w-full h-full {!mounted && "bg-[#1f1f1f]"}" bind:this={editorContainer}>
+		{#if !mounted}
+			<p class="content-center">loading editor...</p>
+		{/if}
+	</div>
 </div>

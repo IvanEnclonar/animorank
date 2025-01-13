@@ -22,7 +22,7 @@
 	let leftWidth = $derived(innerWidth / 2 + offset);
 	let rightWidth = $derived(innerWidth - leftWidth);
 	let problemBody = $state(undefined);
-	let value = $state(undefined);
+	let value = $state("");
 	let handleReset : () => void = $state(() => {});
 
 	//this function sends a post request to the api.
@@ -69,8 +69,9 @@
 
 	$effect( () => {
 		problemBody = problem.body;
-		value = problem.starter_code;
+		value = problem.starter_code
 	})
+	
 
 	const runEveryFiveSeconds = async () =>{
 		let oldHistory = [];
@@ -91,13 +92,14 @@
 			student_email: data.user.email
 		}
 
-
+		
 		const res = await fetch('/api/updateHistory', { method: 'POST', body: JSON.stringify(body) });
 		if(res.ok){
 			console.log('History Updated');
 		} else {
 			console.log('History Update Failed'); 
 		}
+			
 	}
 
   	let interval: string | number | NodeJS.Timeout | undefined;
@@ -116,17 +118,18 @@
 </script>
 
 <svelte:window onmouseup={abortResize} bind:innerWidth />
-
+{#if problemBody}
 <!--Use grow class on your divs if you want no scroll bar, otherwise the content will just overflow all good-->
 <div class="flex justify-start grow overflow-auto relative">
-	{#if problemBody && value}
+
 	<div class=" pl-5 pt-5 pr-3 pb-10 overflow-auto" style={`width : ${leftWidth}px`}>
 		<div
 			class="prose prose-headings:text-white prose-p:text-white prose-a:text-blue-500 prose-code:text-white prose-code:bg-gray-700 prose-code:rounded prose-code:px-1 prose-code:font-normal"
 		>
-			{@html marked(problemBody)}
+			{@html marked(problemBody)}			
 		</div>
 	</div>
+
 
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div
@@ -138,7 +141,7 @@
 	</div>
 
 	<div class="flex flex-col" style={`width : ${rightWidth}px`}>
-		<span class="flex items-end justify-between gap-3 px-3 w-full pt-1 pb-2 grow">
+		<span class="flex items-end justify-between gap-3 px-3 max-h-fit w-full pt-1 pb-2 grow">
 			<div></div>
 
 			<div class="flex gap-2">
@@ -182,5 +185,5 @@
 		</span>
 		{/if}
 	</div>
-	{/if}
 </div>
+{/if}
