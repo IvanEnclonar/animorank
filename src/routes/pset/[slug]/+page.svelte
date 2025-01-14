@@ -1,7 +1,9 @@
 <script>
 	// @ts-nocheck
-
+	import Page404 from '$lib/components/Page404.svelte';
+	import Page from '../../+page.svelte';
 	let { data } = $props();
+
 
 	const subcribe = async () => {
 		const res = await fetch('/api/subscribe', {
@@ -16,8 +18,7 @@
 			})
 		});
 
-		console.log(res);
-
+		
 		if (res.ok) {
 			console.log('Subscribed');
 		} else {
@@ -26,13 +27,16 @@
 	};
 </script>
 
-{#if data}
+{#if data?.pset.length > 0}
 	<div class="w-screen bg-[#121212]">
 		<div class="mx-auto border mt-8 rounded border-borderColor w-8/12">
 			<div class="flex flex-col justify-between border-b border-borderColor p-5">
 				<div class="text-2xl">{data?.pset[0].title}</div>
 				<p class="indent-10 mt-5">{data?.pset[0].description}</p>
-				<div class="flex flex-row justify-end gap-3 mt-6">
+				<div class="flex flex-row justify-end mt-10">
+					<p>By {data['pset'][0].Teacher.name}</p>
+				</div>
+				<!-- <div class="flex flex-row justify-end gap-3 mt-6">
 					{#if data?.user?.role === 'student'}
 						<button class="btn bg-[#006239] text-white hover:bg-[#004327]" onclick={subcribe}
 							>Subscribe</button
@@ -42,7 +46,7 @@
 							>Subscribe</button
 						>
 					{/if}
-				</div>
+				</div> -->
 			</div>
 
 			<div>
@@ -52,4 +56,6 @@
 			</div>
 		</div>
 	</div>
+{:else}	
+	<Page404 />
 {/if}

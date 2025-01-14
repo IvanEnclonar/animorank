@@ -6,22 +6,36 @@ import { SECRET_CLIENT_ID, SECRET_CLIENT_SECRET } from '$env/static/private';
 export const load = async ({ params, locals }) => {
     const { slug } = params;
 
-    const pset = await supabase
-        .from('Problem_set')
-        .select('*')
-        .eq('id', slug);
+    const { data, error } = await supabase
+    .from('Problem_set')
+    .select('*, Problem (id, problem_name, visible, lang), Teacher (name, profile_url)')
+    .eq('id', slug)
+    .eq('is_global', true)
+    .eq('Problem.visible', true);
 
-    const problems = await supabase
-        .from('Problem')
-        .select('problem_name, lang')
-        .eq('problem_set', slug);
-
-    return {
-        pset: pset.data,
-        problems: problems.data,
-        user: locals.user
-    };
-}
+    if(data){
+        if (data.length > 0) {
+            return {
+                pset: data,
+                user: locals.user,
+                problems: data[0].Problem, 
+            };
+        }
+        else {
+            return {
+                pset: [],
+                user: locals.user,
+                problems: [],
+            };
+        }
+    } else {
+        return {
+            pset: [],
+            user: locals.user,
+            problems: [],
+        };
+    }
+};
 
 export const actions = {
     login: async ({ request }) => {
