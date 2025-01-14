@@ -24,6 +24,7 @@
 	let problemBody = $state(undefined);
 	let value = $state("");
 	let handleReset : () => void = $state(() => {});
+	let readProblem = $state(true);
 
 	//this function sends a post request to the api.
 	const handleSubmit = async () => {
@@ -120,9 +121,9 @@
 <svelte:window onmouseup={abortResize} bind:innerWidth />
 {#if problemBody}
 <!--Use grow class on your divs if you want no scroll bar, otherwise the content will just overflow all good-->
-<div class="flex justify-start grow overflow-auto relative">
+<div class="flex justify-start grow overflow-auto relative ">
 
-	<div class=" pl-5 pt-5 pr-3 pb-10 overflow-auto" style={`width : ${leftWidth}px`}>
+	<div class={readProblem ? "pl-5 pt-5 pr-3 pb-10 overflow-auto w-full" : "pl-5 pt-5 pr-3 pb-10 overflow-auto w-full hidden md:block"} style={leftWidth >=  384 ? `width : ${leftWidth}px` : ''}>
 		<div
 			class="prose prose-headings:text-white prose-p:text-white prose-a:text-blue-500 prose-code:text-white prose-code:bg-gray-700 prose-code:rounded prose-code:px-1 prose-code:font-normal"
 		>
@@ -133,14 +134,14 @@
 
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div
-		class="w-2 cursor-col-resize flex justify-center items-center bg-black/30"
+		class="w-2 cursor-col-resize justify-center items-center bg-black/30 hidden md:flex"
 		id="divider"
 		onmousedown={startResize}
 	>
 		<button class="w-full" title="reset sizing" onclick={resetResize}> | </button>
 	</div>
 
-	<div class="flex flex-col" style={`width : ${rightWidth}px`}>
+	<div class={readProblem ? 'hidden md:flex flex-col' : 'flex flex-col w-full'} style={rightWidth >= 384 ? `width : ${rightWidth}px` : ''}>
 		<span class="flex items-end justify-between gap-3 px-3 max-h-fit w-full pt-1 pb-2 grow">
 			<div></div>
 
@@ -167,7 +168,7 @@
 		
 
 		{#if toggleConsole}
-		<span class='w-full h-56 overflow-y-auto'>
+		<span class='w-full h-56 overflow-y-auto flex flex-col'>
 			<div class="h-4 bg-black/30 flex flex-row items-center justify-center p-2" ><button class="text-xs cursor-pointer" onclick={() => { toggleConsole=!toggleConsole}}>Close Console</button></div>
 			{#each consoleContent as line}
 				<div class="px-2 pt-1">
@@ -186,4 +187,11 @@
 		{/if}
 	</div>
 </div>
+<div class="grid md:hidden place-items-center h-10">
+	<div class="flex flex-row gap-2 pb-3 pt-3">
+		<p class={ readProblem ? "text-sm text-gray-500" : "text-sm text-white"}>Show code</p>
+		<input type="checkbox" class="toggle toggle-md" bind:checked={readProblem} />
+		<p class={ readProblem ? "text-sm text-white" : "text-sm text-gray-500"}>Show problem</p>
+	</div>
+</div>	
 {/if}

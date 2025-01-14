@@ -35,7 +35,6 @@
 
 	onMount(async () => {
 		//restore user history
-		console.log('loaded')
 		value = restoreHistory(problem.id, value);
 
 		// Remove the next two lines to load the monaco editor from a CDN
@@ -105,7 +104,7 @@
 </script>
 
 
-<div class="grow shadow-inner border-t-2 overflow-clip">
+<div class="grow shadow-inner border-t-2 overflow-hidden">
 	<div class="w-full h-full {!mounted && "bg-[#1f1f1f]"}" bind:this={editorContainer}>
 		{#if !mounted}
 			<p class="content-center">loading editor...</p>
