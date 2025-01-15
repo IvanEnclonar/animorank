@@ -15,10 +15,11 @@ export const load = async ({ locals }) => {
     };
     } else if (locals.user.role === 'student') {    
     const { data, error } = await supabase
-        .from('Problem_set')
-        .select('title, description, Problem (id, problem_name, visible)')
+        .from('Problem_set')    
+        .select('title, description, Problem (id, problem_name, visible), Teacher (name, profile_url)')
         .eq('is_global', true)
-        .eq('Problem.visible', true);   
+        .eq('Problem.visible', true);
+    
     
     return {
         psets: data,
