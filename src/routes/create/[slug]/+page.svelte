@@ -122,9 +122,9 @@
 		<div class="w-9/10 m-auto mt-10">
 			<div class="dropdown dropdown-hover mb-3">
 				<div tabindex="0" role="button" class="text-2xl underline">{isTestCase ? 'Test Cases' : 'Test Function'}</div>
-				<ul class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-				  <li><button type="button" onclick={() => { isTestCase = true; }} class={isTestCase ? 'btn btn-disabled' : 'btn'}>Test Cases</button></li>
-				  <li><button type="button" onclick={() => { isTestCase = false; }} class={!isTestCase ? 'btn btn-disabled' : 'btn'}>Test Function</button></li>	
+				<ul class="dropdown-content menu bg-[#121212] rounded-box z-[1] w-52 p-2 shadow">
+				  <li><button type="button" onclick={() => { isTestCase = true; }} class={isTestCase ? 'btn btn-disabled bg-inherit' : 'btn btn-outline bg-inherit'}>Test Cases</button></li>
+				  <li><button type="button" onclick={() => { isTestCase = false; }} class={!isTestCase ? 'btn btn-disabled bg-inherit' : 'btn btn-outline bg-inherit'}>Test Function</button></li>	
 				</ul>
 			</div>
 			{#if isTestCase}
@@ -132,7 +132,7 @@
 			{#each testCasesVals as number, index}
 				<div class="flex flex-row items-center gap-3">		
 					<div class="join">
-						<select class="select select-bordered w-24 join-item">
+						<select class="select select-bordered w-24 join-item bg-inherit">
 							<option disabled selected>Type</option>
 							<option>int</option>
 							<option>float</option>
@@ -140,8 +140,8 @@
 							<option>string</option>
 							<option>bool</option>
 						</select>
-						<input type="text" placeholder="Input" class="input input-bordered max-w-1/4 join-item" />
-						<select class="select select-bordered w-32 join-item">
+						<input type="text" placeholder="Input" class="input input-bordered max-w-32 join-item bg-inherit" />
+						<select class="select select-bordered w-32 join-item bg-inherit">
 							<option disabled selected>Operator</option>
 							<option>==</option>
 							<option>!=</option>
@@ -150,7 +150,7 @@
 							<option>&gt;=</option>
 							<option>&lt;=</option>
 						</select>
-							<select class="select select-bordered w-24 join-item">
+							<select class="select select-bordered w-24 join-item bg-inherit">
 								<option disabled selected>Type</option>
 								<option>int</option>
 								<option>float</option>
@@ -158,7 +158,7 @@
 								<option>string</option>
 								<option>bool</option>
 							</select>
-						<input type="text" placeholder="Output" class="input input-bordered max-w-1/4 join-item" />
+						<input type="text" placeholder="Output" class="input input-bordered max-w-32 join-item bg-inherit" />
 					</div>
 					{#if index == testCasesVals.length - 1}
 					<button class="btn btn-outline btn-circle btn-sm" onclick={() => {testCasesVals.push(testCasesVals[testCasesVals.length - 1] + 1);}}>
