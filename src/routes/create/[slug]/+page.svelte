@@ -2,6 +2,8 @@
 	// @ts-nocheck
 	import close from '../../../lib/assets/close.svg';
 	import done from '../../../lib/assets/done.svg';
+	import add from '../../../lib/assets/add-plus.svg';
+	import deleteButton from '../../../lib/assets/delete.svg';
 	import CodeEditor from '$lib/components/CodeEditor.svelte';
 	import Editor from '$lib/components/Editor.svelte';
 	import edit from 'svelte-awesome/icons/edit';
@@ -30,7 +32,8 @@
 	let consoleContent = $state([]);
 	let unreadConsole = $state(false);
 	let isPassed = $state(-1);
-
+	let isTestCase = $state(true);
+	let testCasesVals = $state([0]);
 	let handleReset = $state(() => {});
 
 
@@ -117,10 +120,63 @@
 			</div>
 		</div>
 		<div class="w-9/10 m-auto mt-10">
-			<h2 class="text-2xl mb-3">Testing function</h2>
+			<div class="dropdown dropdown-hover mb-3">
+				<div tabindex="0" role="button" class="text-2xl underline">{isTestCase ? 'Test Cases' : 'Test Function'}</div>
+				<ul class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+				  <li><button type="button" onclick={() => { isTestCase = true; }} class={isTestCase ? 'btn btn-disabled' : 'btn'}>Test Cases</button></li>
+				  <li><button type="button" onclick={() => { isTestCase = false; }} class={!isTestCase ? 'btn btn-disabled' : 'btn'}>Test Function</button></li>	
+				</ul>
+			</div>
+			{#if isTestCase}
+			<div class="flex flex-col gap-3">
+			{#each testCasesVals as number, index}
+				<div class="flex flex-row items-center gap-3">		
+					<div class="join">
+						<select class="select select-bordered w-24 join-item">
+							<option disabled selected>Type</option>
+							<option>int</option>
+							<option>float</option>
+							<option>char</option>
+							<option>string</option>
+							<option>bool</option>
+						</select>
+						<input type="text" placeholder="Input" class="input input-bordered max-w-1/4 join-item" />
+						<select class="select select-bordered w-32 join-item">
+							<option disabled selected>Operator</option>
+							<option>==</option>
+							<option>!=</option>
+							<option>&gt;</option>
+							<option>&lt;</option>
+							<option>&gt;=</option>
+							<option>&lt;=</option>
+						</select>
+							<select class="select select-bordered w-24 join-item">
+								<option disabled selected>Type</option>
+								<option>int</option>
+								<option>float</option>
+								<option>char</option>
+								<option>string</option>
+								<option>bool</option>
+							</select>
+						<input type="text" placeholder="Output" class="input input-bordered max-w-1/4 join-item" />
+					</div>
+					{#if index == testCasesVals.length - 1}
+					<button class="btn btn-outline btn-circle btn-sm" onclick={() => {testCasesVals.push(testCasesVals[testCasesVals.length - 1] + 1);}}>
+						<img src={add} alt="add" class="h-6" />
+					</button>
+					{:else}
+					<button class="btn btn-outline btn-circle btn-sm" onclick={() => {testCasesVals.splice(index, 1);}}>
+						<img src={deleteButton} alt="delete" class="h-5" />
+					</button>
+					{/if}
+				</div>
+			{/each}
+			</div>
+			{:else}
 			<div class="h-96 w-full border flex flex-col">
 				<CodeEditor bind:value={testFunctionRef} bind:problem={testFunctionProblem} bind:handleReset/>
 			</div>
+			{/if}
 		</div>
 	</div>
 
