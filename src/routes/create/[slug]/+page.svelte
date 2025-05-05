@@ -29,13 +29,36 @@
 	});
 
 	let toggleConsole = $state(false);
+	let toggleTestResults = $state(false);
 	let consoleContent = $state([]);
 	let unreadConsole = $state(false);
+	let test_failed = $state([]);
+	let test_failed_count = $derived(test_failed.length);
+	let test_passed = $state([]);
 	let isPassed = $state(-1);
 	let isTestCase = $state(true);
+	let testCases = $state([
+		{
+			input: '',
+			inputType: '',
+			output: '',
+			outputType: '',
+			operator: '',
+		}
+	]);
 	let testCasesVals = $state([0]);
-	let handleReset = $state(() => {});
 
+	let handleReset = $state(() => {});
+	
+	function addTestCase() {
+		testCases.push({
+			input: '',
+			inputType: '',
+			output: '',
+			outputType: '',
+			operator: '',
+		});
+	}
 
 	//start resize, called when the mouse is held down on the resize bar. assigns a listener on mousemove which modifies the offset state.
 	const startResize = (e) => {
@@ -69,6 +92,8 @@
 			isPassed = 0;
 		} else {
 			isPassed = 1;
+			test_failed = data.run.test_failed;
+			test_passed = data.run.test_passed;
 		}
 
 		if (toggleConsole == false) {
@@ -84,6 +109,8 @@
 		formData.append('description', description);
 		formData.append('test_function', testFunctionRef);
 		formData.append('starterCode', codeEditorRef);
+		formData.append('test_cases', JSON.stringify(testCases));
+		formData.append('is_test_case', isTestCase);	
 
 		const res = await fetch('?/createProblem', {
 			method: 'POST',
@@ -128,11 +155,28 @@
 				</ul>
 			</div>
 			{#if isTestCase}
+			<div class="flex flex-row items-center gap-3 mb-3">
+				<input
+					type="text"
+					class="input input-bordered w-1/2 bg-inherit"
+					placeholder="Function Name"
+					bind:value={testFunctionRef}
+				/>
+				<select class="select select-bordered w-24 join-item bg-inherit">
+					<option disabled selected>Type</option>
+					<option>int</option>
+					<option>float</option>
+					<option>char</option>
+					<option>string</option>
+					<option>bool</option>
+				</select>
+			</div>
 			<div class="flex flex-col gap-3">
-			{#each testCasesVals as number, index}
+			{#each testCases as testCase, index}	
+			<!-- TODO: Turn this into a component -->
 				<div class="flex flex-row items-center gap-3">		
 					<div class="join">
-						<select class="select select-bordered w-24 join-item bg-inherit">
+						<select class="select select-bordered w-24 join-item bg-inherit" bind:value={testCase.inputType}>
 							<option disabled selected>Type</option>
 							<option>int</option>
 							<option>float</option>
@@ -140,8 +184,13 @@
 							<option>string</option>
 							<option>bool</option>
 						</select>
-						<input type="text" placeholder="Input" class="input input-bordered max-w-32 join-item bg-inherit" />
-						<select class="select select-bordered w-32 join-item bg-inherit">
+						<input 
+							type="text" 
+							placeholder="Input" 
+							class="input input-bordered max-w-32 join-item bg-inherit"
+							bind:value={testCase.input}
+						/>
+						<select class="select select-bordered w-32 join-item bg-inherit" bind:value={testCase.operator}>
 							<option disabled selected>Operator</option>
 							<option>==</option>
 							<option>!=</option>
@@ -150,22 +199,27 @@
 							<option>&gt;=</option>
 							<option>&lt;=</option>
 						</select>
-							<select class="select select-bordered w-24 join-item bg-inherit">
-								<option disabled selected>Type</option>
-								<option>int</option>
-								<option>float</option>
-								<option>char</option>
-								<option>string</option>
-								<option>bool</option>
-							</select>
-						<input type="text" placeholder="Output" class="input input-bordered max-w-32 join-item bg-inherit" />
+						<select class="select select-bordered w-24 join-item bg-inherit" bind:value={testCase.outputType}>
+							<option disabled selected>Type</option>
+							<option>int</option>
+							<option>float</option>
+							<option>char</option>
+							<option>string</option>
+							<option>bool</option>
+						</select>
+						<input 
+							type="text" 
+							placeholder="Output" 
+							class="input input-bordered max-w-32 join-item bg-inherit"
+							bind:value={testCase.output}
+						/>
 					</div>
-					{#if index == testCasesVals.length - 1}
-					<button class="btn btn-outline btn-circle btn-sm" onclick={() => {testCasesVals.push(testCasesVals[testCasesVals.length - 1] + 1);}}>
+					{#if index === testCases.length - 1}
+					<button class="btn btn-outline btn-circle btn-sm" onclick={() => addTestCase()}>
 						<img src={add} alt="add" class="h-6" />
 					</button>
 					{:else}
-					<button class="btn btn-outline btn-circle btn-sm" onclick={() => {testCasesVals.splice(index, 1);}}>
+					<button class="btn btn-outline btn-circle btn-sm" onclick={() => testCases.splice(index, 1)}>
 						<img src={deleteButton} alt="delete" class="h-5" />
 					</button>
 					{/if}
@@ -195,10 +249,10 @@
 
 			<div class="flex gap-3">
 				{#if isPassed == 1} 
-				<div class="grid place-items-center tooltip tooltip-bottom" data-tip="Test Cases Failed">
-					<div class="border-2 rounded-full grid place-items-center p-1">
-						<img src={close} alt="delete" class="h-4" />
-					</div>
+				<div class="grid place-items-center tooltip tooltip-bottom cursor-pointer" data-tip="Test Cases Failed">
+					<button class="w-9 h-9 border-2 rounded-full grid place-items-center p-1 border-red-500 text-red-500" onclick={() => toggleTestResults = !toggleTestResults}>
+						{test_failed_count}
+					</button>
 				</div>
 				{:else if isPassed == 0}
 				<div class="grid place-items-center tooltip tooltip-bottom" data-tip="Test Cases Passed">
@@ -233,6 +287,42 @@
 				</button>
 			</div>
 		</span>
+		{/if}
+
+		{#if toggleTestResults}
+		<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+			<div class="bg-[#121212] p-6 rounded-lg shadow-lg max-w-md w-full">
+				<div class="flex justify-between items-center mb-4">
+					<h3 class="text-xl font-semibold">Test Cases</h3>
+					<button 
+						class="btn btn-circle btn-sm btn-ghost"
+						onclick={() => toggleTestResults = !toggleTestResults}
+					>✕</button>
+				</div>
+				<div class="space-y-4">
+					{#if test_failed.length > 0}
+						<div>
+							<h4 class="mb-2">Failed Tests:</h4>
+							<div class="bg-black/30 p-2 rounded-lg">
+							{#each test_failed as test}
+								<div class="text-sm mb-1">• {test}</div>
+							{/each}
+							</div>
+						</div>
+					{/if}
+					{#if test_passed.length > 0}
+						<div>
+							<h4 class="mb-2">Passed Tests:</h4>
+							<div class="bg-black/30 p-2 rounded-lg">
+							{#each test_passed as test}
+								<div class="text-sm mb-1">• {test}</div>
+							{/each}
+							</div>
+						</div>
+					{/if}
+				</div>
+			</div>
+		</div>
 		{/if}
 	</div>
 </div>

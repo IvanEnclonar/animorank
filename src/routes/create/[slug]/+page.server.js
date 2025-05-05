@@ -4,6 +4,7 @@ export const actions = {
     createProblem: async ({ request, params }) => {
         const formData = await request.formData();
         const { slug } = params;
+        const test_cases = formData.get('test_cases');
         const input = {
             problem_name: formData.get('title'),
             body: formData.get('description'),
@@ -11,6 +12,9 @@ export const actions = {
             starter_code: formData.get('starterCode'),
             problem_set: slug,
             lang: "C",
+            is_test_case: formData.get('is_test_case') === 'true',
+            // @ts-ignore   
+            test_cases: JSON.parse(test_cases),
         };
 
         // insert into supabase

@@ -20,10 +20,9 @@
 
 <div class="flex flex-col h-screen bg-[#121212] text-white">
 	<!--Navbar start-->
-	<div class="navbar h-16 border-b-2 px-3 border-borderColor flex justify-between">
+	<div class="navbar h-16 px-3 border-b-2 border-borderColor flex justify-between">
 		<div class="relative">
-			<img src={logo} alt="logo" class="h-20 absolute -left-2" />
-			<a href="/" class="cursor-pointer font-bold text-xl font-poppins_h ml-11 z-10">Animorank</a>
+			<a href="/" class="cursor-pointer font-bold text-xl font-poppins_h">Animorank</a>
 		</div>
 
 		{#if loggedIn}
