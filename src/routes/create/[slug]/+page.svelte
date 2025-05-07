@@ -8,6 +8,8 @@
 	import Editor from '$lib/components/Editor.svelte';
 	import edit from 'svelte-awesome/icons/edit';
 	import { goto } from '$app/navigation';
+	import fa from 'svelte-awesome/icons/fa';
+	import { createTestScript } from '$lib/utils/createTestScript.js';
 
 	let innerWidth = $state(0); //gets the width of the page
 	let offset = $state(0); //offset state, determines how much more pixels should be taken by the right panel.
@@ -36,24 +38,45 @@
 	let test_failed_count = $derived(test_failed.length);
 	let test_passed = $state([]);
 	let isPassed = $state(-1);
-	let isTestCase = $state(true);
+	let functionName = $state('');
+	let returnType = $state('');
+	let isTestCase = $state(false);
 	let testCases = $state([
 		{
-			input: '',
-			inputType: '',
+			inputs: [],
+			inputTypes: [],
 			output: '',
 			outputType: '',
 			operator: '',
 		}
 	]);
 	let testCasesVals = $state([0]);
+	let testCaseInputCount = $state(1);
+	let isTestCaseFilled = $derived(
+		testCases.every(testCase => 
+			testCase.inputs?.length === testCaseInputCount &&
+			testCase.inputTypes?.length === testCaseInputCount &&
+			testCase.inputs?.every(input => input && input.length > 0) &&
+			testCase.inputTypes?.every(type => type && type.length > 0) &&
+			testCase.output &&
+			testCase.output.length > 0 &&
+			testCase.outputType &&
+			testCase.outputType.length > 0 &&
+			testCase.operator &&
+			testCase.operator.length > 0
+		) && 
+		functionName &&
+		functionName.length > 0 && 
+		returnType &&
+		returnType.length > 0
+	);
 
 	let handleReset = $state(() => {});
 	
-	function addTestCase() {
+	const addTestCase = () => {
 		testCases.push({
-			input: '',
-			inputType: '',
+			inputs: [],
+			inputTypes: [],
 			output: '',
 			outputType: '',
 			operator: '',
@@ -146,92 +169,14 @@
 				<Editor bind:this={editorRef} />
 			</div>
 		</div>
-		<div class="w-9/10 m-auto mt-10">
-			<div class="dropdown dropdown-hover mb-3">
-				<div tabindex="0" role="button" class="text-2xl underline">{isTestCase ? 'Test Cases' : 'Test Function'}</div>
-				<ul class="dropdown-content menu bg-[#121212] rounded-box z-[1] w-52 p-2 shadow">
-				  <li><button type="button" onclick={() => { isTestCase = true; }} class={isTestCase ? 'btn btn-disabled bg-inherit' : 'btn btn-outline bg-inherit'}>Test Cases</button></li>
-				  <li><button type="button" onclick={() => { isTestCase = false; }} class={!isTestCase ? 'btn btn-disabled bg-inherit' : 'btn btn-outline bg-inherit'}>Test Function</button></li>	
-				</ul>
-			</div>
-			{#if isTestCase}
-			<div class="flex flex-row items-center gap-3 mb-3">
-				<input
-					type="text"
-					class="input input-bordered w-1/2 bg-inherit"
-					placeholder="Function Name"
-					bind:value={testFunctionRef}
-				/>
-				<select class="select select-bordered w-24 join-item bg-inherit">
-					<option disabled selected>Type</option>
-					<option>int</option>
-					<option>float</option>
-					<option>char</option>
-					<option>string</option>
-					<option>bool</option>
-				</select>
-			</div>
-			<div class="flex flex-col gap-3">
-			{#each testCases as testCase, index}	
-			<!-- TODO: Turn this into a component -->
-				<div class="flex flex-row items-center gap-3">		
-					<div class="join">
-						<select class="select select-bordered w-24 join-item bg-inherit" bind:value={testCase.inputType}>
-							<option disabled selected>Type</option>
-							<option>int</option>
-							<option>float</option>
-							<option>char</option>
-							<option>string</option>
-							<option>bool</option>
-						</select>
-						<input 
-							type="text" 
-							placeholder="Input" 
-							class="input input-bordered max-w-32 join-item bg-inherit"
-							bind:value={testCase.input}
-						/>
-						<select class="select select-bordered w-32 join-item bg-inherit" bind:value={testCase.operator}>
-							<option disabled selected>Operator</option>
-							<option>==</option>
-							<option>!=</option>
-							<option>&gt;</option>
-							<option>&lt;</option>
-							<option>&gt;=</option>
-							<option>&lt;=</option>
-						</select>
-						<select class="select select-bordered w-24 join-item bg-inherit" bind:value={testCase.outputType}>
-							<option disabled selected>Type</option>
-							<option>int</option>
-							<option>float</option>
-							<option>char</option>
-							<option>string</option>
-							<option>bool</option>
-						</select>
-						<input 
-							type="text" 
-							placeholder="Output" 
-							class="input input-bordered max-w-32 join-item bg-inherit"
-							bind:value={testCase.output}
-						/>
-					</div>
-					{#if index === testCases.length - 1}
-					<button class="btn btn-outline btn-circle btn-sm" onclick={() => addTestCase()}>
-						<img src={add} alt="add" class="h-6" />
-					</button>
-					{:else}
-					<button class="btn btn-outline btn-circle btn-sm" onclick={() => testCases.splice(index, 1)}>
-						<img src={deleteButton} alt="delete" class="h-5" />
-					</button>
-					{/if}
+		{#if !isTestCase}
+			<div class="w-9/10 m-auto mt-10">
+				<div tabindex="0" role="button" class="text-2xl mb-3">Test Function</div>
+				<div class="h-96 w-full border flex flex-col">
+					<CodeEditor bind:value={testFunctionRef} bind:problem={testFunctionProblem} bind:handleReset/>
 				</div>
-			{/each}
 			</div>
-			{:else}
-			<div class="h-96 w-full border flex flex-col">
-				<CodeEditor bind:value={testFunctionRef} bind:problem={testFunctionProblem} bind:handleReset/>
-			</div>
-			{/if}
-		</div>
+		{/if}
 	</div>
 
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -243,10 +188,9 @@
 		<!-- <button class="w-full" title="reset sizing" onclick={resetResize}> | </button> -->
 	</div>
 
-	<div class="flex flex-col" style={`width : ${rightWidth}px`}>
-		<span class="flex items-end justify-between gap-3 px-3 w-full pt-1 pb-2 grow">
-			<div class="self-center justify-self-center">Starter Code</div>
-
+	<div class="flex flex-col overflow-auto" style={`width : ${rightWidth}px`}>
+		<span class="flex items-end justify-between gap-3 px-3 w-full h-15 pt-1 pb-2">
+			<div class="self-center justify-self-center">{isTestCase ? 'Test Cases' : 'Starter Code'}</div>
 			<div class="flex gap-3">
 				{#if isPassed == 1} 
 				<div class="grid place-items-center tooltip tooltip-bottom cursor-pointer" data-tip="Test Cases Failed">
@@ -261,33 +205,179 @@
 					</div>
 				</div>
 				{/if}
+				<button class="btn btn-outline border border-gray-700" onclick={() => { isTestCase = !isTestCase; }}> {isTestCase ? 'Test Cases' : 'Test Function'} </button>
+				
+				{#if !isTestCase}
 				<button class="btn btn-outline border border-gray-700" onclick={runCode}> Run </button>
+				{/if}
+				
 				<button class="btn bg-[#006239] text-white hover:bg-[#004327]" onclick={submit}>
 					Finish
 				</button>
 			</div>
 		</span>
 
-		<CodeEditor bind:value={codeEditorRef} bind:problem={codeEditorProblem} bind:handleReset/>
+		{#if isTestCase}
+			<div class="h-96 w-full flex flex-col border-t border-t-white p-3">
+				<div class="flex flex-row items-center gap-3 mb-3">
+					<input
+						type="text"
+						class="input input-bordered w-1/2 bg-inherit"
+						placeholder="Function Name"
+						bind:value={functionName}
+					/>
+					<select class="select select-bordered w-24 join-item bg-inherit"
+						bind:value={returnType}>
+						<option disabled selected>Return Type</option>
+						<option>int</option>
+						<option>float</option>
+						<option>char</option>
+						<option>string</option>
+						<option>bool</option>
+					</select>
 
-		{#if toggleConsole}
-		<span class='w-full h-56 overflow-y-auto'>
-			<div class="h-4 bg-black/30 flex flex-row items-center justify-center p-2" ><button class="text-xs cursor-pointer" onclick={() => { toggleConsole=!toggleConsole}}>Close Console</button></div>
-			{#each consoleContent as line}
-				<div class="px-2 pt-1">
-					<p class="text-xs">{line}</p>
+					<input
+						type="number"
+						class="input input-bordered w-24 bg-inherit"
+						placeholder="Parameters"
+						bind:value={testCaseInputCount}
+					/>
 				</div>
-			{/each}
-		</span>
-		{:else}
-		<span class='w-full'>
-			<div class=" bg-black/30 flex flex-row items-center justify-center " > 
-				<button class="text-xs cursor-pointer relative" onclick={() => { toggleConsole=!toggleConsole; unreadConsole=false}}>
-					Open Console {unreadConsole ? '🚨' : ''}
-				</button>
+				
+				<div class="flex flex-col gap-3">
+				{#each testCases as testCase, index}    
+					<div class="flex flex-col gap-2">
+						<!-- Input Sections based on testCaseInputCount -->
+						{#each Array(testCaseInputCount) as _, inputIndex}
+							<div class="flex flex-row items-center gap-3">
+								<div class="join flex-grow">
+									<select class="select select-bordered w-24 join-item bg-inherit"
+										bind:value={testCase.inputTypes[inputIndex]}>
+										<option disabled selected>Type</option>
+										<option>int</option>
+										<option>int[]</option>
+										<option>float</option>
+										<option>float[]</option>
+										<option>char</option>
+										<option>char[]</option>
+										<option>string</option>
+										<option>string[]</option>
+										<option>bool</option>
+										<option>bool[]</option>
+									</select>
+									
+									{#if testCase.inputTypes[inputIndex]?.includes('[]')}
+										<input 
+											type="text" 
+											placeholder={`Input ${inputIndex + 1} (comma-separated)`}
+											class="input input-bordered w-full join-item bg-inherit"
+											bind:value={testCase.inputs[inputIndex]}
+										/>
+									{:else}
+										<input 
+											type="text" 
+											placeholder={`Input ${inputIndex + 1}`}
+											class="input input-bordered w-32 join-item bg-inherit"
+											bind:value={testCase.inputs[inputIndex]}
+										/>
+									{/if}
+								</div>
+							</div>
+						{/each}
+
+						<!-- Operator and Output Section -->
+						<div class="flex flex-row items-center gap-3">
+							<select class="select select-bordered w-32 bg-inherit" bind:value={testCase.operator}>
+								<option disabled selected>Operator</option>
+								<option>==</option>
+								<option>!=</option>
+								<option>&gt;</option>
+								<option>&lt;</option>
+								<option>&gt;=</option>
+								<option>&lt;=</option>
+							</select>
+
+							<div class="join flex-grow">
+								<select class="select select-bordered w-24 join-item bg-inherit" bind:value={testCase.outputType}>
+									<option disabled selected>Type</option>
+									<option>int</option>
+									<option>int[]</option>
+									<option>float</option>
+									<option>float[]</option>
+									<option>char</option>
+									<option>char[]</option>
+									<option>string</option>
+									<option>string[]</option>
+									<option>bool</option>
+									<option>bool[]</option>
+								</select>
+								
+								{#if testCase.outputType?.includes('[]')}
+									<input 
+										type="text" 
+										placeholder="Output (comma-separated)" 
+										class="input input-bordered w-full join-item bg-inherit"
+										bind:value={testCase.output}
+									/>
+								{:else}
+									<input 
+										type="text" 
+										placeholder="Output" 
+										class="input input-bordered w-32 join-item bg-inherit"
+										bind:value={testCase.output}
+									/>
+								{/if}
+							</div>
+
+							<!-- Add/Delete buttons -->
+							{#if index === testCases.length - 1}
+								<button class="btn btn-outline btn-circle btn-sm" onclick={() => addTestCase()}>
+									<img src={add} alt="add" class="h-6" />
+								</button>
+							{:else}
+								<button class="btn btn-outline btn-circle btn-sm" onclick={() => testCases.splice(index, 1)}>
+									<img src={deleteButton} alt="delete" class="h-5" />
+								</button>
+							{/if}
+						</div>
+					</div>
+				{/each}
+				</div>
+
+				<div class="flex flex-col justify-center mt-10 bg-black/30 p-2 rounded-lg">
+
+					<h2>Please fill all fields to see testing script</h2>
+					<!-- {#if isTestCaseFilled}
+						<p>{createTestScript(returnType, functionName, testCases[0].inputTypes, testCases)}</p>
+					{/if} -->
+				</div>
+
 			</div>
-		</span>
+		{:else}
+			<CodeEditor bind:value={codeEditorRef} bind:problem={codeEditorProblem} bind:handleReset/>
 		{/if}
+		
+		{#if !isTestCase}
+			{#if toggleConsole}
+			<span class='w-full h-56 overflow-y-auto'>
+				<div class="h-4 bg-black/30 flex flex-row items-center justify-center p-2" ><button class="text-xs cursor-pointer" onclick={() => { toggleConsole=!toggleConsole}}>Close Console</button></div>
+				{#each consoleContent as line}
+					<div class="px-2 pt-1">
+						<p class="text-xs">{line}</p>
+					</div>
+				{/each}
+			</span>
+			{:else}
+			<span class='w-full shrink-0'>
+				<div class=" bg-black/30 flex flex-row items-center justify-center " > 
+					<button class="text-xs cursor-pointer relative" onclick={() => { toggleConsole=!toggleConsole; unreadConsole=false}}>
+						Open Console {unreadConsole ? '🚨' : ''}
+					</button>
+				</div>
+			</span>
+			{/if}
+		{/if}
+
 
 		{#if toggleTestResults}
 		<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -326,3 +416,6 @@
 		{/if}
 	</div>
 </div>
+
+
+<!-- make a function that takes in input test cases and output test cases -->

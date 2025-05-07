@@ -3,7 +3,6 @@
 	import menu from '$lib/assets/menu.svg';
 	import MobileLoginModal from '$lib/components/MobileLoginModal.svelte';
 	import MobileSettingsModal from '$lib/components/MobileSettingsModal.svelte';
-	import logo from '$lib/assets/logo.svg';
 
 	let openSettings = $state(false);
 	let openLogin = $state(false);
@@ -34,7 +33,7 @@
 				onclick={() => (openSettings = true)}
 			>
 				<img
-					src={user.picture}
+					src={user?.picture}
 					alt="profile"
 					class="h-10 w-10 object-cover rounded-full cursor-pointer"
 				/>

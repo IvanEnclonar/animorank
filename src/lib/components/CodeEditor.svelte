@@ -60,7 +60,7 @@
 				value: value,
 				language: 'c',
 				automaticLayout: true,
-				theme: 'custom-vs-dark' // Use the custom theme
+				theme: 'custom-vs-dark', // Use the custom theme
 			});
 		else {
 			editor = monaco.editor.create(editorContainer, {
