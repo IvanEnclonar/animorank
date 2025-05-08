@@ -5,6 +5,7 @@
 	import add from '../../../lib/assets/add-plus.svg';
 	import deleteButton from '../../../lib/assets/delete.svg';
 	import CodeEditor from '$lib/components/CodeEditor.svelte';
+	import Console from '$lib/components/Console.svelte';
 	import TestCaseFeedBackIcon from '$lib/components/TestCaseFeedBackIcon.svelte';
 	import TestCaseDisplay from '$lib/components/TestCaseDisplay.svelte';
 	import Editor from '$lib/components/Editor.svelte';
@@ -38,9 +39,9 @@
 	let consoleContent = $state([]);
 	let unreadConsole = $state(false);
 	let test_failed = $state([]);
+	let test_passed = $state([]);
 	let test_failed_count = $derived(test_failed.length);
 	let test_passed_count = $derived(test_passed.length);
-	let test_passed = $state([]);
 	let isPassed = $state(-1);
 	let functionName = $state('');
 	let returnType = $state('');
@@ -229,12 +230,9 @@
 		<span class="flex items-end justify-between gap-3 px-3 w-full h-15 pt-1 pb-2">
 			<div class="self-center justify-self-center">{isTestCase ? 'Test Cases' : 'Starter Code'}</div>
 			<div class="flex gap-3">
-				<TestCaseFeedBackIcon
-					bind:toggleTestResults
-					test_failed_count={test_failed_count}
-					test_passed_count={test_passed.length}
-					isPassed={isPassed}
-				/>
+				{#if !isTestCase}
+					<TestCaseFeedBackIcon bind:toggleTestResults test_failed_count={test_failed_count} test_passed_count={test_passed.length} isPassed={isPassed}/>
+				{/if}
 				<button class="btn btn-outline border border-gray-700" onclick={() => { isTestCase = !isTestCase; }}> {isTestCase ? 'Test Cases' : 'Test Function'} </button>
 				
 				{#if !isTestCase}
@@ -383,33 +381,12 @@
 		{:else}
 			<CodeEditor bind:value={codeEditorRef} bind:problem={codeEditorProblem} bind:handleReset/>
 		{/if}
+
+		<TestCaseDisplay bind:toggleTestResults test_passed={test_passed} test_failed={test_failed} />
 		
 		{#if !isTestCase}
-			{#if toggleConsole}
-			<span class='w-full h-56 overflow-y-auto'>
-				<div class="h-4 bg-black/30 flex flex-row items-center justify-center p-2" ><button class="text-xs cursor-pointer" onclick={() => { toggleConsole=!toggleConsole}}>Close Console</button></div>
-				{#each consoleContent as line}
-					<div class="px-2 pt-1">
-						<p class="text-xs">{line}</p>
-					</div>
-				{/each}
-			</span>
-			{:else}
-			<span class='w-full shrink-0'>
-				<div class=" bg-black/30 flex flex-row items-center justify-center " > 
-					<button class="text-xs cursor-pointer relative" onclick={() => { toggleConsole=!toggleConsole; unreadConsole=false}}>
-						Open Console {unreadConsole ? '🚨' : ''}
-					</button>
-				</div>
-			</span>
-			{/if}
+			<Console bind:toggleConsole consoleContent={consoleContent} bind:unreadConsole />
 		{/if}
 
-		{#if toggleTestResults}
-			<TestCaseDisplay bind:toggleTestResults test_passed={test_passed} test_failed={test_failed} />
-		{/if}
 	</div>
 </div>
-
-
-<!-- make a function that takes in input test cases and output test cases -->

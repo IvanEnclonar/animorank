@@ -1,5 +1,6 @@
 <script lang="ts">
 	import CodeEditor from '$lib/components/CodeEditor.svelte';
+	import Console from '$lib/components/Console.svelte';
 	import { marked } from 'marked';
 	import {onMount, onDestroy} from 'svelte';
 	import TestCaseDisplay from '$lib/components/TestCaseDisplay.svelte';
@@ -167,29 +168,10 @@
 
 		<CodeEditor bind:value bind:problem bind:handleReset/>
 
-		{#if toggleTestResults}
-			<TestCaseDisplay bind:toggleTestResults test_passed={test_passed} test_failed={test_failed} />
-		{/if}
-		
+		<TestCaseDisplay bind:toggleTestResults test_passed={test_passed} test_failed={test_failed} />
 
-		{#if toggleConsole}
-		<span class='w-full h-56 overflow-y-auto flex flex-col'>
-			<div class="h-4 bg-black/30 flex flex-row items-center justify-center p-2" ><button class="text-xs cursor-pointer" onclick={() => { toggleConsole=!toggleConsole}}>Close Console</button></div>
-			{#each consoleContent as line}
-				<div class="px-2 pt-1">
-					<p class="text-xs">{line}</p>
-				</div>
-			{/each}
-		</span>
-		{:else}
-		<span class='w-full'>
-			<div class=" bg-black/30 flex flex-row items-center justify-center " > 
-				<button class="text-xs cursor-pointer relative" onclick={() => { toggleConsole=!toggleConsole; unreadConsole=false}}>
-					Open Console {unreadConsole ? '🚨' : ''}
-				</button>
-			</div>
-		</span>
-		{/if}
+		<Console bind:toggleConsole consoleContent={consoleContent} bind:unreadConsole />
+		
 	</div>
 </div>
 <div class="grid md:hidden place-items-center h-10">
