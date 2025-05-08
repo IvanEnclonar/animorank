@@ -32,9 +32,9 @@ export const POST = async (/** @type {{ request: { json: () => any; }; }} */ eve
         // check if the output contains any test cases
         console_output.forEach((/** @type {string} */ line) => {
             if (line.startsWith('TEST_PASSED:')) {
-                test_passed.push(line)
+                test_passed.push(line.substring('TEST_PASSED:'.length))
             } else if (line.startsWith('TEST_FAILED:')) {
-                test_failed.push(line)
+                test_failed.push(line.substring('TEST_FAILED:'.length))
             }
         });
 

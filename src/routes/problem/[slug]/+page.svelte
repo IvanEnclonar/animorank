@@ -4,6 +4,7 @@
 	import CodeEditor from '$lib/components/CodeEditor.svelte';
 	import { marked } from 'marked';
 	import {onMount, onDestroy} from 'svelte';
+	import TestCaseDisplay from '$lib/components/TestCaseDisplay.svelte';
 	interface Props {
 		data: any;
 	}
@@ -17,7 +18,6 @@
 	let offset = $state(0); //offset state, determines how much more pixels should be taken by the right panel.	
 	let consoleContent = $state([]); //console content
 	let unreadConsole = $state(false); //unread console content flag
-	let isPassed = $state(-1); //flag for the test case
 
 	let leftWidth = $derived(innerWidth / 2 + offset);
 	let rightWidth = $derived(innerWidth - leftWidth);
@@ -25,6 +25,13 @@
 	let value = $state("");
 	let handleReset : () => void = $state(() => {});
 	let readProblem = $state(true);
+
+	let toggleTestResults = $state(false);
+	let test_passed = $state([]);
+	let test_failed = $state([]);
+	let test_failed_count = $derived(test_failed.length);
+	let test_passed_count = $derived(test_passed.length);
+	let isPassed = $state(-1); //flag for the test case
 
 	//this function sends a post request to the api.
 	const handleSubmit = async () => {
@@ -37,7 +44,10 @@
 		let output = timeString + ' : ' + data.run.output;
 		// @ts-ignore
 		consoleContent = [...consoleContent, output];
-		if(data.run.code == 0) {
+		test_failed = data.run.test_failed;
+		test_passed = data.run.test_passed;
+
+		if(data.run.test_failed.length == 0) {
 			isPassed = 0;
 		} else {
 			isPassed = 1;
@@ -147,16 +157,16 @@
 
 			<div class="flex gap-2">
 				{#if isPassed == 1} 
-				<div class="grid place-items-center tooltip tooltip-bottom" data-tip="Test Cases Failed">
-					<div class="border-2 rounded-full grid place-items-center p-1">
-						<img src={close} alt="delete" class="h-4" />
-					</div>
+				<div class="grid place-items-center tooltip tooltip-bottom cursor-pointer" data-tip="Test Cases Failed">
+					<button class="w-9 h-9 border-2 rounded-full grid place-items-center p-1 border-red-500 text-red-500" onclick={() => toggleTestResults = !toggleTestResults}>
+						{test_failed_count}
+					</button>
 				</div>
 				{:else if isPassed == 0}
-				<div class="grid place-items-center tooltip tooltip-bottom" data-tip="Test Cases Passed">
-					<div class="border-2 rounded-full grid place-items-center p-1">
-						<img src={done} alt="delete" class="h-5" />
-					</div>
+				<div class="grid place-items-center tooltip tooltip-bottom cursor-pointer" data-tip="Test Cases Passed">
+					<button class="w-9 h-9 border-2 rounded-full grid place-items-center p-1 border-green-500 text-green-500" onclick={() => toggleTestResults = !toggleTestResults}>
+						{test_passed_count}
+					</button>
 				</div>
 				{/if}
 				<button class="btn" onclick={handleReset}> Reset Code </button>
@@ -165,6 +175,10 @@
 		</span>
 
 		<CodeEditor bind:value bind:problem bind:handleReset/>
+
+		{#if toggleTestResults}
+			<TestCaseDisplay bind:toggleTestResults test_passed={test_passed} test_failed={test_failed} />
+		{/if}
 		
 
 		{#if toggleConsole}
