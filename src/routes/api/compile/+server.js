@@ -16,26 +16,35 @@ export const POST = async (/** @type {{ request: { json: () => any; }; }} */ eve
     const res = await fetch("https://emkc.org/api/v2/piston/execute", {method: "POST", headers:{ "Content-Type": "application/json"}, body: JSON.stringify(response)})
 
     const print = await res.json()
+    /**
+     * @type {string[]}
+     */
     const test_failed = []
+    /**
+     * @type {string[]}
+     */
     const test_passed = []
 
     // parse the output of the run
-    if (print.run.code !== 0) {
+    if (print.compile.code == 0) {
         const console_output = print.run.output.split("\n")
-        // find the "START TEST OUTPUT" line
-        const start_index = console_output.findIndex((/** @type {string | string[]} */ line) => line.includes("START TEST OUTPUT"))
-        const end_index = console_output.findIndex((/** @type {string | string[]} */ line) => line.includes("END TEST OUTPUT"))
-        for (let i = start_index + 1; i < end_index; i++) {
-            // check if the string starts with TEST PASSED or TEST FAILED
-            if (console_output[i].startsWith("TEST_PASSED")) {
-                let temp = console_output[i].replace("TEST_PASSED:", "")
-                test_passed.push(temp)
-            } else if (console_output[i].startsWith("TEST_FAILED")) {
-                // remove the TEST_FAILED prefix
-                let temp = console_output[i].replace("TEST_FAILED:", "")
-                test_failed.push(temp)
+
+        // check if the output contains any test cases
+        console_output.forEach((/** @type {string} */ line) => {
+            if (line.startsWith('TEST_PASSED:')) {
+                test_passed.push(line)
+            } else if (line.startsWith('TEST_FAILED:')) {
+                test_failed.push(line)
             }
-        }
+        });
+
+        // remove the test cases from the output
+        print.run.output = print.run.output.split('\n')
+            .filter((/** @type {string} */ line) =>
+                !line.startsWith('TEST_PASSED') && 
+                !line.startsWith('TEST_FAILED'))
+            .join('\n')
+    
     }
 
     print.run.test_failed = test_failed

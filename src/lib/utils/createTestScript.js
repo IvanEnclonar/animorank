@@ -49,9 +49,9 @@ const runTc = (fName, testCase, inputTypes, dtype) => {
     const template = `
             res = ${fName}(${inputs});
             if (res ${testCase.operator} ${formatInput(testCase.output, 0, [dtype])}){
-                printf("TEST_PASSED: ${formatSpecifier[dtype]} ${testCase.operator} ${testCase.output} ✅\\n", res);            
+                printf("\\nTEST_PASSED: ${formatSpecifier[dtype]} ${testCase.operator} ${testCase.output} ✅\\n", res);            
             } else {
-                printf("TEST_FAILED: ${formatSpecifier[dtype]} ${testCase.operator} ${testCase.output} ❌\\n", res);
+                printf("\\nTEST_FAILED: ${formatSpecifier[dtype]} ${testCase.operator} ${testCase.output} ❌\\n", res);
             }
     `
 
@@ -78,11 +78,8 @@ export const createTestScript = (dtype, fName, inputTypes, testCases) => {
 
         int main(){
 
-
-            printf("\\nSTART TEST OUTPUT\\n");
             ${dtype} res;
             ${tcTemplates}
-            printf("END TEST OUTPUT\\n");
 
             return 0;
         }
