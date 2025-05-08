@@ -12,9 +12,6 @@ export const actions = {
             starter_code: formData.get('starterCode'),
             problem_set: slug,
             lang: "C",
-            is_test_case: formData.get('is_test_case') === 'true',
-            // @ts-ignore   
-            test_cases: JSON.parse(test_cases),
         };
 
         // insert into supabase

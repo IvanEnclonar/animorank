@@ -9,7 +9,8 @@
 	import edit from 'svelte-awesome/icons/edit';
 	import { goto } from '$app/navigation';
 	import fa from 'svelte-awesome/icons/fa';
-	import { createTestScript } from '$lib/utils/createTestScript.js';
+	import { createTestScript, generateStarterCode } from '$lib/utils/createTestScript.js';
+	import { derived } from 'svelte/store';
 
 	let innerWidth = $state(0); //gets the width of the page
 	let offset = $state(0); //offset state, determines how much more pixels should be taken by the right panel.
@@ -41,35 +42,46 @@
 	let functionName = $state('');
 	let returnType = $state('');
 	let isTestCase = $state(false);
+	let testCaseInputTypes = $state([]);
 	let testCases = $state([
 		{
 			inputs: [],
-			inputTypes: [],
 			output: '',
-			outputType: '',
 			operator: '',
 		}
 	]);
 	let testCasesVals = $state([0]);
 	let testCaseInputCount = $state(1);
-	let isTestCaseFilled = $derived(
-		testCases.every(testCase => 
-			testCase.inputs?.length === testCaseInputCount &&
-			testCase.inputTypes?.length === testCaseInputCount &&
-			testCase.inputs?.every(input => input && input.length > 0) &&
-			testCase.inputTypes?.every(type => type && type.length > 0) &&
-			testCase.output &&
-			testCase.output.length > 0 &&
-			testCase.outputType &&
-			testCase.outputType.length > 0 &&
-			testCase.operator &&
-			testCase.operator.length > 0
-		) && 
-		functionName &&
-		functionName.length > 0 && 
-		returnType &&
-		returnType.length > 0
-	);
+	let isTestCaseFilled = $derived.by(() => {
+		let allInputsFilled = testCases.every(tc => 
+			tc.inputs.length === testCaseInputCount && 
+			tc.inputs.every(input => input !== undefined && input !== '') &&
+			tc.output !== undefined && 
+			tc.output !== '' && 
+			tc.operator !== undefined && 
+			tc.operator !== ''
+		);
+
+		return allInputsFilled && 
+			testCaseInputTypes.length > 0 && 
+			testCaseInputTypes.every(type => type !== "Type" && type !== '') &&
+			functionName !== '' && 
+			returnType !== '' && returnType !== 'Return Type';
+	});
+
+	let testScript = $derived.by(() => {
+		if (isTestCaseFilled) {
+			return createTestScript(returnType, functionName, testCaseInputTypes.slice(0,testCaseInputCount), testCases);
+		}
+		return '';
+	});
+
+	let testCaseStarterCode = $derived.by(() => {
+		if (isTestCaseFilled) {
+			return generateStarterCode(returnType, functionName, testCaseInputTypes.slice(0,testCaseInputCount));
+		}
+		return '';
+	});
 
 	let handleReset = $state(() => {});
 	
@@ -126,24 +138,46 @@
 
 	const submit = async () => {
 		const description = editorRef.getContent();
+		
+		if (isTestCase) {
+			if (isTestCaseFilled) {
+				const formData = new FormData();
+				formData.append('title', title);
+				formData.append('description', description);
+				formData.append('test_function', testScript);
+				formData.append('starterCode', testCaseStarterCode);
 
-		const formData = new FormData();
-		formData.append('title', title);
-		formData.append('description', description);
-		formData.append('test_function', testFunctionRef);
-		formData.append('starterCode', codeEditorRef);
-		formData.append('test_cases', JSON.stringify(testCases));
-		formData.append('is_test_case', isTestCase);	
+				const res = await fetch('?/createProblem', {
+					method: 'POST',
+					body: formData
+				});
 
-		const res = await fetch('?/createProblem', {
-			method: 'POST',
-			body: formData
-		});
-
-		if (res.ok) {
-			goto('/');
+				if (res.ok) {
+					goto('/');
+				} else {
+					alert('Problem creation failed');
+				}
+			} else {
+				alert('Please fill all fields before submitting.');
+				return;
+			}
 		} else {
-			alert('Problem creation failed');
+			const formData = new FormData();
+			formData.append('title', title);
+			formData.append('description', description);
+			formData.append('test_function', testFunctionRef);
+			formData.append('starterCode', codeEditorRef);
+			
+			const res = await fetch('?/createProblem', {
+				method: 'POST',
+				body: formData
+			});
+
+			if (res.ok) {
+				goto('/');
+			} else {
+				alert('Problem creation failed');
+			}
 		}
 	};
 </script>
@@ -192,6 +226,7 @@
 		<span class="flex items-end justify-between gap-3 px-3 w-full h-15 pt-1 pb-2">
 			<div class="self-center justify-self-center">{isTestCase ? 'Test Cases' : 'Starter Code'}</div>
 			<div class="flex gap-3">
+
 				{#if isPassed == 1} 
 				<div class="grid place-items-center tooltip tooltip-bottom cursor-pointer" data-tip="Test Cases Failed">
 					<button class="w-9 h-9 border-2 rounded-full grid place-items-center p-1 border-red-500 text-red-500" onclick={() => toggleTestResults = !toggleTestResults}>
@@ -205,6 +240,7 @@
 					</div>
 				</div>
 				{/if}
+
 				<button class="btn btn-outline border border-gray-700" onclick={() => { isTestCase = !isTestCase; }}> {isTestCase ? 'Test Cases' : 'Test Function'} </button>
 				
 				{#if !isTestCase}
@@ -226,58 +262,68 @@
 						placeholder="Function Name"
 						bind:value={functionName}
 					/>
-					<select class="select select-bordered w-24 join-item bg-inherit"
+					<select class="select select-bordered w-36 join-item bg-inherit"
 						bind:value={returnType}>
-						<option disabled selected>Return Type</option>
+						<option disabled selected value="">Return Type</option>
 						<option>int</option>
 						<option>float</option>
 						<option>char</option>
 						<option>string</option>
 						<option>bool</option>
 					</select>
-
-					<input
+					<div class="join h-full">
+						<div class="badge badge-neutral join-item grid place-items-center h-full">Parameter Count</div>
+						<input
 						type="number"
-						class="input input-bordered w-24 bg-inherit"
+						class="input input-bordered w-24 join-item bg-inherit"
 						placeholder="Parameters"
 						bind:value={testCaseInputCount}
-					/>
+						/>
+					</div>
+				</div>
+
+				<!-- Input Types Section (moved outside test cases loop) -->
+				<div class="flex flex-col gap-2 mb-4">
+					{#each Array(testCaseInputCount) as _, inputIndex}
+						<div class="join w-full">
+							<div class="badge badge-neutral join-item h-full grid place-items-center px-4">Parameter {inputIndex + 1}</div>
+							<select class="select select-bordered w-24 join-item bg-inherit"
+								bind:value={testCaseInputTypes[inputIndex]}>
+								<option disabled selected>Type</option>
+								<option>int</option>
+								<option>int[]</option>
+								<option>float</option>
+								<option>float[]</option>
+								<option>char</option>
+								<option>char[]</option>
+								<option>string</option>
+								<option>string[]</option>
+								<option>bool</option>
+								<option>bool[]</option>
+							</select>
+						</div>
+					{/each}
 				</div>
 				
 				<div class="flex flex-col gap-3">
 				{#each testCases as testCase, index}    
 					<div class="flex flex-col gap-2">
-						<!-- Input Sections based on testCaseInputCount -->
+						<!-- Input Values Section -->
 						{#each Array(testCaseInputCount) as _, inputIndex}
 							<div class="flex flex-row items-center gap-3">
 								<div class="join flex-grow">
-									<select class="select select-bordered w-24 join-item bg-inherit"
-										bind:value={testCase.inputTypes[inputIndex]}>
-										<option disabled selected>Type</option>
-										<option>int</option>
-										<option>int[]</option>
-										<option>float</option>
-										<option>float[]</option>
-										<option>char</option>
-										<option>char[]</option>
-										<option>string</option>
-										<option>string[]</option>
-										<option>bool</option>
-										<option>bool[]</option>
-									</select>
-									
-									{#if testCase.inputTypes[inputIndex]?.includes('[]')}
+									{#if testCaseInputTypes[inputIndex]?.includes('[]')}
 										<input 
 											type="text" 
 											placeholder={`Input ${inputIndex + 1} (comma-separated)`}
-											class="input input-bordered w-full join-item bg-inherit"
+											class="input input-bordered w-full bg-inherit"
 											bind:value={testCase.inputs[inputIndex]}
 										/>
 									{:else}
 										<input 
 											type="text" 
 											placeholder={`Input ${inputIndex + 1}`}
-											class="input input-bordered w-32 join-item bg-inherit"
+											class="input input-bordered w-full bg-inherit"
 											bind:value={testCase.inputs[inputIndex]}
 										/>
 									{/if}
@@ -285,7 +331,7 @@
 							</div>
 						{/each}
 
-						<!-- Operator and Output Section -->
+						<!-- Output Section (simplified) -->
 						<div class="flex flex-row items-center gap-3">
 							<select class="select select-bordered w-32 bg-inherit" bind:value={testCase.operator}>
 								<option disabled selected>Operator</option>
@@ -298,35 +344,12 @@
 							</select>
 
 							<div class="join flex-grow">
-								<select class="select select-bordered w-24 join-item bg-inherit" bind:value={testCase.outputType}>
-									<option disabled selected>Type</option>
-									<option>int</option>
-									<option>int[]</option>
-									<option>float</option>
-									<option>float[]</option>
-									<option>char</option>
-									<option>char[]</option>
-									<option>string</option>
-									<option>string[]</option>
-									<option>bool</option>
-									<option>bool[]</option>
-								</select>
-								
-								{#if testCase.outputType?.includes('[]')}
-									<input 
-										type="text" 
-										placeholder="Output (comma-separated)" 
-										class="input input-bordered w-full join-item bg-inherit"
-										bind:value={testCase.output}
-									/>
-								{:else}
-									<input 
-										type="text" 
-										placeholder="Output" 
-										class="input input-bordered w-32 join-item bg-inherit"
-										bind:value={testCase.output}
-									/>
-								{/if}
+								<input 
+									type="text" 
+									placeholder="Expected Output" 
+									class="input input-bordered w-full bg-inherit"
+									bind:value={testCase.output}
+								/>
 							</div>
 
 							<!-- Add/Delete buttons -->
@@ -344,13 +367,24 @@
 				{/each}
 				</div>
 
-				<div class="flex flex-col justify-center mt-10 bg-black/30 p-2 rounded-lg">
-
-					<h2>Please fill all fields to see testing script</h2>
-					<!-- {#if isTestCaseFilled}
-						<p>{createTestScript(returnType, functionName, testCases[0].inputTypes, testCases)}</p>
-					{/if} -->
-				</div>
+				{#if isTestCaseFilled}
+					<div class="flex flex-col mt-10 gap-4">
+						<div>
+							<div class="text-l mb-2">Test Script (Hidden from Students):</div>
+							<pre class="bg-black/30 p-4 rounded-lg">
+								{testScript}
+							</pre>
+						</div>
+						<div>
+							<div class="text-l mb-2">Starter Code (Shown to Students):</div>
+							<pre class="bg-black/30 p-4 rounded-lg">
+								{testCaseStarterCode}
+							</pre>
+						</div>
+					</div>
+				{:else}
+					<div class="flex justify-center mt-10 bg-black/30 p-2 rounded-lg">Please fill all fields to see testing script.</div>
+				{/if}
 
 			</div>
 		{:else}
