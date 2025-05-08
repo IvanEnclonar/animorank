@@ -1,16 +1,14 @@
 <script lang="ts">
-	import close from '../../../lib/assets/close.svg';
-	import done from '../../../lib/assets/done.svg';
 	import CodeEditor from '$lib/components/CodeEditor.svelte';
 	import { marked } from 'marked';
 	import {onMount, onDestroy} from 'svelte';
 	import TestCaseDisplay from '$lib/components/TestCaseDisplay.svelte';
+	import TestCaseFeedBackIcon from '$lib/components/TestCaseFeedBackIcon.svelte';
 	interface Props {
 		data: any;
 	}
 
 	let { data }: Props = $props();
-
 
 	let problem = $state(data.Problem?.[0] ?? {});
 	let innerWidth: number = $state(0); //gets the width of the page
@@ -156,19 +154,12 @@
 			<div></div>
 
 			<div class="flex gap-2">
-				{#if isPassed == 1} 
-				<div class="grid place-items-center tooltip tooltip-bottom cursor-pointer" data-tip="Test Cases Failed">
-					<button class="w-9 h-9 border-2 rounded-full grid place-items-center p-1 border-red-500 text-red-500" onclick={() => toggleTestResults = !toggleTestResults}>
-						{test_failed_count}
-					</button>
-				</div>
-				{:else if isPassed == 0}
-				<div class="grid place-items-center tooltip tooltip-bottom cursor-pointer" data-tip="Test Cases Passed">
-					<button class="w-9 h-9 border-2 rounded-full grid place-items-center p-1 border-green-500 text-green-500" onclick={() => toggleTestResults = !toggleTestResults}>
-						{test_passed_count}
-					</button>
-				</div>
-				{/if}
+				<TestCaseFeedBackIcon
+					bind:toggleTestResults
+					test_failed_count={test_failed_count}
+					test_passed_count={test_passed.length}
+					isPassed={isPassed}
+				/>
 				<button class="btn" onclick={handleReset}> Reset Code </button>
 				<button class="btn bg-[#006239] text-white hover:bg-[#004327]" onclick={handleSubmit}> Run </button>
 			</div>

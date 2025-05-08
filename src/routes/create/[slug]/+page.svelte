@@ -5,6 +5,7 @@
 	import add from '../../../lib/assets/add-plus.svg';
 	import deleteButton from '../../../lib/assets/delete.svg';
 	import CodeEditor from '$lib/components/CodeEditor.svelte';
+	import TestCaseFeedBackIcon from '$lib/components/TestCaseFeedBackIcon.svelte';
 	import TestCaseDisplay from '$lib/components/TestCaseDisplay.svelte';
 	import Editor from '$lib/components/Editor.svelte';
 	import edit from 'svelte-awesome/icons/edit';
@@ -38,6 +39,7 @@
 	let unreadConsole = $state(false);
 	let test_failed = $state([]);
 	let test_failed_count = $derived(test_failed.length);
+	let test_passed_count = $derived(test_passed.length);
 	let test_passed = $state([]);
 	let isPassed = $state(-1);
 	let functionName = $state('');
@@ -227,27 +229,17 @@
 		<span class="flex items-end justify-between gap-3 px-3 w-full h-15 pt-1 pb-2">
 			<div class="self-center justify-self-center">{isTestCase ? 'Test Cases' : 'Starter Code'}</div>
 			<div class="flex gap-3">
-
-				{#if isPassed == 1} 
-				<div class="grid place-items-center tooltip tooltip-bottom cursor-pointer" data-tip="Test Cases Failed">
-					<button class="w-9 h-9 border-2 rounded-full grid place-items-center p-1 border-red-500 text-red-500" onclick={() => toggleTestResults = !toggleTestResults}>
-						{test_failed_count}
-					</button>
-				</div>
-				{:else if isPassed == 0}
-				<div class="grid place-items-center tooltip tooltip-bottom" data-tip="Test Cases Passed">
-					<div class="border-2 rounded-full grid place-items-center p-1">
-						<img src={done} alt="delete" class="h-5" />
-					</div>
-				</div>
-				{/if}
-
+				<TestCaseFeedBackIcon
+					bind:toggleTestResults
+					test_failed_count={test_failed_count}
+					test_passed_count={test_passed.length}
+					isPassed={isPassed}
+				/>
 				<button class="btn btn-outline border border-gray-700" onclick={() => { isTestCase = !isTestCase; }}> {isTestCase ? 'Test Cases' : 'Test Function'} </button>
 				
 				{#if !isTestCase}
 				<button class="btn btn-outline border border-gray-700" onclick={runCode}> Run </button>
 				{/if}
-				
 				<button class="btn bg-[#006239] text-white hover:bg-[#004327]" onclick={submit}>
 					Finish
 				</button>
