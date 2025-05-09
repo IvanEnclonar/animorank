@@ -8,11 +8,11 @@
 </svelte:head>
 
 
-<div class="w-full flex flex-col items-center justify-center min-h-[120%] overflow-auto bg-[#121212]">
-    <div class="flex flex-col items-center justify-center w-full h-full p-4 z-10">
+<div class="w-full flex flex-col items-center justify-center min-h-[140%] md:min-h-[120%] overflow-auto bg-[#121212]">
+    <div class="flex flex-col items-center justify-center w-full h-[120%] md:h-full p-4 z-10">
         <div class="bg-[#121D18] rounded-2xl p-2 px-4 flex w-fit text-forestGreen text-xs">DLSU's Official Coding Platform</div>
-        <div class="font-sans text-7xl font-bold mt-4 flex flex-col justify-center items-center lg:flex-row"><p class="text-center">Practice with Animorank</div>
-        <div class="mt-4 text-gray-400 text-xl block md:hidden text-center">Practice, and improve your programming skills with challenges designed for DLSU students</div>
+        <div class="font-sans text-5xl lg:text-7xl font-bold mt-4 flex flex-col justify-center items-center lg:flex-row text-center">Practice with Animorank</div>
+        <div class="mt-4 text-gray-400 text-base block md:hidden text-center">Practice, and improve your programming skills with challenges designed for DLSU students</div>
         <div class="mt-4 text-gray-400 text-xl hidden md:block ">Practice, and improve your programming skills with challenges</div>
         <div class="text-gray-400 text-xl hidden md:block"> designed for DLSU students</div>
         <button class="btn btn-outline mt-5" onclick={() => {openLogin.open = true}}>Get started</button>

@@ -6,7 +6,7 @@
 		openLogin.open = false;
 	};
 </script>
-<div class="fixed grid place-items-center w-full h-full">
+<div class="fixed grid place-items-center w-full h-full z-20">
     <div
         class="bg-[#1E1E1E] shadow-xl flex flex-col justify-center items-center z-10 rounded-md relative w-80 pt-10 pb-5"
     >
