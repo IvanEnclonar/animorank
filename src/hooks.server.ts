@@ -7,7 +7,7 @@ import type { JwtPayload } from 'jsonwebtoken';
 export const handle: Handle = async ({ event, resolve }) => {
     const requestedPath = event.url.pathname;
     const cookies = event.cookies;
-    const protectedRoutes = ["/edit", "/"]
+    const protectedRoutes = ["/edit", "/create", "/profile", "/",]
 
     // Auth check
     const token = cookies.get("token");
