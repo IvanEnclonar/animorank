@@ -1,89 +1,53 @@
-<!-- src/routes/+page.svelte -->
 <script>
-    // You may need to import your auth store here if you implement it later
+    import { openLogin } from '$lib/state/login.svelte';
+
 </script>
   
 <svelte:head>
-    <title>About Animorank - AI-Powered Coding Education Platform</title>
+    <title>Animorank</title>
 </svelte:head>
-  
-<style>
-    :global(body) {
-        background-color: #121212;
-        color: white;
-    }
 
-    .stat-card {
-        transition: transform 0.2s ease-in-out;
-    }
 
-    .stat-card:hover {
-        transform: translateY(-5px);
-    }
-</style>
-  
-<div class="min-h-screen bg-[#121212]">
-    <main>
-        <section class="container mx-auto px-4 py-16 text-center">
-            <h1 class="text-4xl md:text-5xl font-bold mb-6 text-[#006239]">
-                About Animorank
-            </h1>
-            <p class="text-xl max-w-3xl mx-auto mb-12 leading-relaxed">
-                Animorank is an innovative coding platform developed specifically for university students 
-                to enhance their programming skills through practical problem-solving and AI-assisted learning.
-            </p>
-            
-            <!-- Stats Section -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16">
-                <div class="stat-card bg-[#1e1e1e] p-6 rounded-lg border">
-                    <h3 class="text-3xl font-bold text-[#006239]">1000+</h3>
-                    <p class="text-gray-300">Active Students</p>
-                </div>
-                <div class="stat-card bg-[#1e1e1e] p-6 rounded-lg border">
-                    <h3 class="text-3xl font-bold text-[#006239]">500+</h3>
-                    <p class="text-gray-300">Coding Problems</p>
-                </div>
-                <div class="stat-card bg-[#1e1e1e] p-6 rounded-lg border">
-                    <h3 class="text-3xl font-bold text-[#006239]">50+</h3>
-                    <p class="text-gray-300">University Courses</p>
-                </div>
-                <div class="stat-card bg-[#1e1e1e] p-6 rounded-lg border">
-                    <h3 class="text-3xl font-bold text-[#006239]">24/7</h3>
-                    <p class="text-gray-300">AI Support</p>
-                </div>
+<div class="w-full flex flex-col items-center justify-center min-h-[120%] overflow-auto bg-[#121212]">
+    <div class="flex flex-col items-center justify-center w-full h-full p-4">
+        <div class="bg-[#121D18] rounded-2xl p-2 px-4 flex w-fit text-forestGreen text-xs">DLSU's Official Coding Platform</div>
+        <div class="font-sans text-7xl font-bold mt-4 flex flex-col justify-center items-center lg:flex-row"><p class="text-center">Practice with&nbsp;</p><h1 class="text-accentColor">Animorank</h1></div>
+        <div class="mt-4 text-gray-400 text-xl block md:hidden text-center">Practice, and improve your programming skills with challenges</div>
+        <div class="mt-4 text-gray-400 text-xl hidden md:block ">Practice, and improve your programming skills with challenges</div>
+        <div class="text-gray-400 text-xl hidden md:block"> designed for DLSU students</div>
+        <button class="btn btn-outline mt-5" onclick={() => {openLogin.open = true}}>Get started</button>
+    </div>
+    <!-- <div class="w-full p-2 bg-[#040605]">
+        <div class="w-full bg-[#000000] py-2 px-4 overflow-hidden">
+            <div class="text-md font-mono text-gray-400 whitespace-nowrap">
+              <span class="text-purple-400">const</span> <span class="text-blue-400">solution</span> = <span class="text-blue-400">analyze</span>(<span class="text-orange-400">input</span>);<span class="text-blue-400">return</span> solution.<span class="text-blue-400">optimize</span>();<span class="text-gray-500">// DLSU Animorank Platform</span><span class="text-purple-400">const</span> <span class="text-blue-400">rank</span> = <span class="text-purple-400">await</span> <span class="text-blue-400">submitSolution</span>(solveProblem); console.<span class="text-blue-400">log</span>(rank);
             </div>
-        </section>
-  
-       
-
-        <section class="bg-[#1e1e1e] py-16">
-            <div class="container mx-auto px-4">
-                <h2 class="text-3xl font-bold mb-8 text-center text-[#006239]">Getting Started</h2>
-                <div class="max-w-3xl mx-auto space-y-6">
-                    <div class="bg-[#121212] p-6 rounded-lg border-l-4 border-[#006239]">
-                        <h3 class="text-xl font-semibold mb-2 text-[#006239]">1. Sign Up</h3>
-                        <p>Create an account using your university email to get started.</p>
-                    </div>
-                    <div class="bg-[#121212] p-6 rounded-lg border-l-4 border-[#006239]">
-                        <h3 class="text-xl font-semibold mb-2 text-[#006239]">2. Choose Problems</h3>
-                        <p>Select from various programming challenges or access your course-specific problems.</p>
-                    </div>
-                    <div class="bg-[#121212] p-6 rounded-lg border-l-4 border-[#006239]">
-                        <h3 class="text-xl font-semibold mb-2 text-[#006239]">3. Code & Learn</h3>
-                        <p>Write your solutions in our interactive code editor with real-time AI assistance.</p>
-                    </div>
-                    <div class="bg-[#121212] p-6 rounded-lg border-l-4 border-[#006239]">
-                        <h3 class="text-xl font-semibold mb-2 text-[#006239]">4. Get Feedback</h3>
-                        <p>Receive immediate feedback and suggestions to improve your code.</p>
-                    </div>
-                </div>
-            </div>
-        </section>  
-    </main>
-  
-    <footer class="py-8 bg-[#121212]">
-        <div class="container mx-auto px-4 text-center text-gray-400">
-            <p>&copy; 2024 Animorank. All rights reserved.</p>
         </div>
-    </footer>
+    </div> -->
+    <footer class="bg-black py-8 px-8 w-full">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <div class="flex items-center mb-4">
+              <span class="font-semibold">Animorank</span>
+            </div>
+            <p class="text-gray-400 text-sm">
+              DLSU's official practice coding platform for students who want to enhance their
+              programming skills.
+            </p>
+          </div>
+          
+          <div class="flex flex-col md:items-end">
+            <ul class="text-gray-400 text-sm">
+                <li class="font-semibold mb-2 text-white">Connect</li>
+              <li class="mb-1 hover:text-white cursor-pointer">Contact Us</li>
+              <li class="mb-1 hover:text-white cursor-pointer">DLSU Website</li>
+              <li class="hover:text-white cursor-pointer">Support</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="text-center text-gray-500 text-xs mt-10">
+          © 2025 AnimoRank. All rights reserved. De La Salle University.
+        </div>
+      </footer>
 </div>

@@ -1,11 +1,13 @@
 <script lang="ts">
 	import '../app.css';
+	import { openLogin } from '$lib/state/login.svelte';
 	import menu from '$lib/assets/menu.svg';
 	import MobileLoginModal from '$lib/components/MobileLoginModal.svelte';
 	import MobileSettingsModal from '$lib/components/MobileSettingsModal.svelte';
+	import type { svelte } from '@sveltejs/vite-plugin-svelte';
+	import type { auth } from 'google-auth-library';
 
 	let openSettings = $state(false);
-	let openLogin = $state(false);
 	interface Props {
 		data: any;
 		children?: import('svelte').Snippet;
@@ -39,13 +41,14 @@
 				/>
 			</button>
 		{:else}
-			<button class="btn btn-outline" onclick={() => (openLogin = true)}> Login </button>
+			<button class="btn btn-outline" onclick={() => (openLogin.open = true)}> Login </button>
 		{/if}
 	</div>
 	<!--Navbar ends and body begins-->
 	{@render children?.()}
-	{#if openLogin && !loggedIn}
-		<MobileLoginModal bind:openLogin />
+
+	{#if openLogin.open && !loggedIn}
+		<MobileLoginModal />
 	{/if}
 
 	{#if openSettings && loggedIn}

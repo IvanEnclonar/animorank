@@ -158,7 +158,7 @@
 				<TestCaseFeedBackIcon
 					bind:toggleTestResults
 					test_failed_count={test_failed_count}
-					test_passed_count={test_passed.length}
+					test_passed_count={test_passed_count}
 					isPassed={isPassed}
 				/>
 				<button class="btn" onclick={handleReset}> Reset Code </button>
@@ -171,7 +171,6 @@
 		<TestCaseDisplay bind:toggleTestResults test_passed={test_passed} test_failed={test_failed} />
 
 		<Console bind:toggleConsole consoleContent={consoleContent} bind:unreadConsole />
-		
 	</div>
 </div>
 <div class="grid md:hidden place-items-center h-10">

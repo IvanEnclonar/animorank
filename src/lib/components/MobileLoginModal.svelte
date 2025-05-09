@@ -1,9 +1,9 @@
 <script>
 	/** @type {{openLogin: any}} */
-	let { openLogin = $bindable() } = $props();
+    import { openLogin } from '$lib/state/login.svelte';
 
 	const closeModal = () => {
-		openLogin = false;
+		openLogin.open = false;
 	};
 </script>
 <div class="fixed grid place-items-center w-full h-full">
@@ -60,7 +60,7 @@
     </div>
     <button
         onclick={() => {
-            openLogin = false;
+            openLogin.open = false;
         }}
         class="bg-black/50 absolute w-full h-full z-9"
         aria-label="Hidden Close"
