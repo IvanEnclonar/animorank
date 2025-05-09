@@ -51,9 +51,9 @@
                 </button>
 				<p class="text-center text-xs text-gray-400 mt-2">
                     By continuing, you agree to our
-                    <a href="#" class="text-[#0A875E] hover:text-[#006239]"> Terms of Service </a>
+                    <a href="https://animorank.com/about" class="text-[#0A875E] hover:text-[#006239]"> Terms of Service </a>
                     and
-                    <a href="#" class="text-[#0A875E] hover:text-[#006239]"> Privacy Policy</a>
+                    <a href="https://animorank.com/about" class="text-[#0A875E] hover:text-[#006239]"> Privacy Policy</a>
                 </p>
             </form>
         </div>

@@ -12,7 +12,7 @@
     <div class="flex flex-col items-center justify-center w-full h-full p-4 z-10">
         <div class="bg-[#121D18] rounded-2xl p-2 px-4 flex w-fit text-forestGreen text-xs">DLSU's Official Coding Platform</div>
         <div class="font-sans text-7xl font-bold mt-4 flex flex-col justify-center items-center lg:flex-row"><p class="text-center">Practice with Animorank</div>
-        <div class="mt-4 text-gray-400 text-xl block md:hidden text-center">Practice, and improve your programming skills with challenges</div>
+        <div class="mt-4 text-gray-400 text-xl block md:hidden text-center">Practice, and improve your programming skills with challenges designed for DLSU students</div>
         <div class="mt-4 text-gray-400 text-xl hidden md:block ">Practice, and improve your programming skills with challenges</div>
         <div class="text-gray-400 text-xl hidden md:block"> designed for DLSU students</div>
         <button class="btn btn-outline mt-5" onclick={() => {openLogin.open = true}}>Get started</button>
@@ -44,9 +44,15 @@
           <div class="flex flex-col md:items-end">
             <ul class="text-gray-400 text-sm">
                 <li class="font-semibold mb-2 text-white">Connect</li>
-              <li class="mb-1 hover:text-white cursor-pointer">Contact Us</li>
-              <li class="mb-1 hover:text-white cursor-pointer">DLSU Website</li>
-              <li class="hover:text-white cursor-pointer">Support</li>
+                <li class="mb-1 hover:text-white cursor-pointer" >
+                    <a href="mailto:paul_enclonar@dlsu.edu.ph" class="mb-1 hover:text-white cursor-pointer block">Contact Us</a>
+                </li>
+                <li class="mb-1 hover:text-white cursor-pointer" >
+                    <a href="https://forms.gle/uDpnjEoYkyjHZsWVA" class="mb-1 hover:text-white cursor-pointer block">Feedback</a>
+                </li>
+                <li class="mb-1 hover:text-white cursor-pointer" >
+                    <a href="https://github.com/IvanEnclonar/animorank" class="mb-1 hover:text-white cursor-pointer block">Github</a>
+                </li>
             </ul>
           </div>
         </div>
