@@ -35,7 +35,7 @@ export const load = async ({ locals }) => {
 
 export const actions = {
     login: async ({ request }) => {
-        const redirectURL = 'http://animorank.com/oath';
+        const redirectURL = 'https://animorank.com/oath';
 
         const oAuth2Client = new OAuth2Client(
             SECRET_CLIENT_ID,

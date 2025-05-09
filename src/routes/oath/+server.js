@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 
 
 export const GET = async ({ url }) => {
-    const redirectURL = 'http://animorank.com/oath';
+    const redirectURL = 'https://animorank.com/oath';
     const code = url.searchParams.get('code');
     let role = null;
     let id_token = null;
