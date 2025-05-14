@@ -1,18 +1,23 @@
 <script>
 	/** @type {{openLogin: any}} */
     import { openLogin } from '$lib/state/login.svelte';
+    import {openTerms} from '$lib/state/terms.svelte';
+
+    const moveToTerms = () => {
+        openLogin.open = false;
+        openTerms.open = true;
+    };
 
 	const closeModal = () => {
 		openLogin.open = false;
 	};
 </script>
-<div class="fixed grid place-items-center w-full h-full z-20">
-    <div
-        class="bg-[#1E1E1E] shadow-xl flex flex-col justify-center items-center z-10 rounded-md relative w-80 pt-10 pb-5"
-    >
+{#if openLogin.open}
+<div class="fixed grid place-items-center w-full h-full z-20 backdrop-blur-sm">
+    <div class="bg-[#1E1E1E] shadow-xl flex flex-col justify-center items-center z-10 rounded-lg relative w-[360px] pt-10 pb-5 border border-gray-800">
         <button
             class="btn btn-square btn-ghost absolute top-2 right-2"
-            onclick={closeModal}
+            on:click={closeModal}
             aria-label="Close"
         >
             <svg
@@ -30,13 +35,14 @@
                 />
             </svg>
         </button>
-        <h1 class="text-3xl font-bold mt-2">Hi there!</h1>
-        <div class="card-body w-full">
-            <p class="text-center mb-8">Please sign in/up to continue</p>
+        <h1 class="text-3xl font-bold">Hi there!</h1>
+        <p class="text-gray-400 mt-10 mb-4">Please sign in to continue</p>
+        
+        <div class="card-body w-full pt-6">
             <form method="POST" action="?/login">
                 <button
                     type="submit"
-                    class="bg-[#1E1E1E] btn w-full gap-2 border-[#0A875E] text-[#0A875E] hover:bg-[#006239] hover:text-white transition-all duration-300"
+                    class="bg-[#1E1E1E] btn w-full gap-2 border-[#0A875E] text-[#0A875E] hover:bg-[#006239] hover:text-white transition-all duration-300 hover:scale-105"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -49,20 +55,19 @@
                     </svg>
                     Continue with Google
                 </button>
-				<p class="text-center text-xs text-gray-400 mt-2">
+                <p class="text-center text-xs text-gray-400 mt-4">
                     By continuing, you agree to our
-                    <a href="https://animorank.com/about" class="text-[#0A875E] hover:text-[#006239]"> Terms of Service </a>
+                    <button on:click={moveToTerms} class="text-[#0A875E] hover:text-[#006239] hover:underline">Terms of Service</button>
                     and
-                    <a href="https://animorank.com/about" class="text-[#0A875E] hover:text-[#006239]"> Privacy Policy</a>
+                    <button on:click={moveToTerms} class="text-[#0A875E] hover:text-[#006239] hover:underline">Cookie Policy</button>
                 </p>
             </form>
         </div>
     </div>
     <button
-        onclick={() => {
-            openLogin.open = false;
-        }}
+        on:click={closeModal}
         class="bg-black/50 absolute w-full h-full z-9"
         aria-label="Hidden Close"
     ></button>
 </div>
+{/if}
