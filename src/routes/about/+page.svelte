@@ -1,6 +1,5 @@
 <script>
     import { openLogin } from '$lib/state/login.svelte';
-
 </script>
   
 <svelte:head>
@@ -15,7 +14,7 @@
         <div class="mt-4 text-gray-400 text-base block md:hidden text-center">Practice, and improve your programming skills with challenges designed for DLSU students</div>
         <div class="mt-4 text-gray-400 text-xl hidden md:block ">Practice, and improve your programming skills with challenges</div>
         <div class="text-gray-400 text-xl hidden md:block"> designed for the CCPROG series</div>
-        <button class="btn btn-outline mt-5" onclick={() => {openLogin.open = true}}>Get started</button>
+        <button class="btn btn-outline mt-5" onclick={() => {openLogin.openSignUp = true}}>Get started</button>
     </div>
     <div class="blob-cont">
         <div class="yellow blob"></div>
@@ -61,6 +60,7 @@
           © 2025 AnimoRank. All rights reserved.
         </div>
       </footer>
+      
 </div>
 
 <style>
