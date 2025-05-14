@@ -5,8 +5,7 @@
 	import MobileLoginModal from '$lib/components/MobileLoginModal.svelte';
 	import MobileSettingsModal from '$lib/components/MobileSettingsModal.svelte';
     import SignUpModal from '$lib/components/SignUpModal.svelte';
-	import type { svelte } from '@sveltejs/vite-plugin-svelte';
-	import type { auth } from 'google-auth-library';
+	import TermsModal from '$lib/components/TermsModal.svelte';
 
 	let openSettings = $state(false);
 	interface Props {
@@ -47,6 +46,8 @@
 	</div>
 	<!--Navbar ends and body begins-->
 	{@render children?.()}
+
+	<TermsModal />
 
 	{#if openLogin.open && !loggedIn}
 		<MobileLoginModal />
