@@ -1,9 +1,12 @@
 <script>
     import { openLogin } from '$lib/state/login.svelte';
+    import { openTerms } from '$lib/state/terms.svelte';
+
 </script>
   
 <svelte:head>
     <title>Animorank</title>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
 </svelte:head>
 
 
@@ -31,8 +34,11 @@
     <footer class="bg-black py-8 px-8 w-full z-10">
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
-            <div class="flex items-center mb-4">
-              <span class="font-semibold">Animorank</span>
+            <div class="flex flex-row items-center mb-2 align-center">
+                <span class="font-semibold mr-2">Animorank</span>
+                <div class="mt-2">
+                    <a class="github-button" href="https://github.com/ivanenclonar/animorank" data-color-scheme="no-preference: light; light: light; dark: dark;" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star ivanenclonar/animorank on GitHub">Star</a>
+                </div>
             </div>
             <p class="text-gray-400 text-sm">
               A dedicated practice coding platform for students who want to master programming
@@ -50,7 +56,7 @@
                     <a href="https://forms.gle/uDpnjEoYkyjHZsWVA" class="mb-1 hover:text-white cursor-pointer block">Feedback</a>
                 </li>
                 <li class="mb-1 hover:text-white cursor-pointer" >
-                    <a href="https://github.com/IvanEnclonar/animorank" class="mb-1 hover:text-white cursor-pointer block">Github</a>
+                    <button onclick={() => { openTerms.open = true}} class="mb-1 hover:text-white cursor-pointer block">Terms of Service</button>
                 </li>
             </ul>
           </div>
@@ -60,7 +66,6 @@
           © 2025 AnimoRank. All rights reserved.
         </div>
       </footer>
-      
 </div>
 
 <style>

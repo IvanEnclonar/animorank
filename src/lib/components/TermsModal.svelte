@@ -32,7 +32,7 @@
                         </ul>
                         <p class="mb-4">As of right now, this web app relies on cookies to function properly. Therefore, we require your agreement to our Cookie Policy before you can continue.</p>    
                     </div>
-                </div>
+            </div>
         </div>
         <button onclick={closeModal} class="bg-black/50 absolute w-full h-full z-9" aria-label="Hidden Close"></button>
     </div>
