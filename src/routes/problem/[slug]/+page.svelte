@@ -83,33 +83,38 @@
 	})
 	
 
-	const runEveryFiveSeconds = async () =>{
+	const updateSessionHistory = async () => {
 		let oldHistory = [];
 		if (data.Problem[0]?.Session.length > 0) {
 			oldHistory = data.Problem[0].Session[0].history;
 		}
 		let history = localStorage.getItem(problem.id);
-		let combinedHistory = oldHistory;
-		if(history){
-			history = JSON.parse(history);
-			combinedHistory = [...oldHistory, ...(history || [])];
-		}
-
-		let body = {
-			id: problem.id,
-			history: combinedHistory,
-			last_state: value,
-			student_email: data.user.email
-		}
-
 		
-		const res = await fetch('/api/updateHistory', { method: 'POST', body: JSON.stringify(body) });
-		if(res.ok){
-			console.log('History Updated');
-		} else {
-			console.log('History Update Failed'); 
-		}
+		// Only proceed if there's history in localStorage
+		if (history) {
+			history = JSON.parse(history);
+			let combinedHistory = [...oldHistory, ...(history || [])];
 			
+			// Check if the history has actually changed
+			let lastKnownHistory = localStorage.getItem(`lastKnown_${problem.id}`);
+			if (!lastKnownHistory || lastKnownHistory !== JSON.stringify(combinedHistory)) {
+				let body = {
+					id: problem.id,
+					history: combinedHistory,
+					last_state: value,
+					student_email: data.user.email
+				}
+
+				const res = await fetch('/api/updateHistory', { method: 'POST', body: JSON.stringify(body) });
+				if (res.ok) {
+					// Store the current history as last known
+					localStorage.setItem(`lastKnown_${problem.id}`, JSON.stringify(combinedHistory));
+					console.log('History Updated');
+				} else {
+					console.log('History Update Failed');
+				}
+			}
+		}
 	}
 
   	let interval: string | number | NodeJS.Timeout | undefined;
@@ -117,7 +122,7 @@
 	// Set up the interval when the component is mounted
 	onMount(() => {
 		localStorage.clear();
-		interval = setInterval(runEveryFiveSeconds, 10000); // Run every 5 seconds
+		interval = setInterval(updateSessionHistory, 30000); // Run every 30 seconds
 	});
 
 	// Clean up the interval when the component is destroyed
