@@ -8,22 +8,22 @@
 </script>
 
 {#if !toggle}
-<button class="mt-8 min-h-72 w-96 sm:mr-5 p-3 bg-[#1F1F1F] rounded cursor-pointer flex flex-col hover:bg-[#252525] transform transition-transform hover:scale-105" onclick={() => (toggle = !toggle)}>
-	<div class="flex justify-between pt-2 pb-2">
-		<div class="text-xl">{title}</div>
-		<div class="flex align-center justify-center items-center">
-			<p class="text-sm mr-2 text-center text-gray-400">By {pset.Teacher.name}</p>
+	<button class="mt-8 min-h-72 w-96 sm:mr-5 p-3 bg-[#1F1F1F] rounded cursor-pointer flex flex-col hover:bg-[#252525] transform transition-transform hover:scale-105" onclick={() => (toggle = !toggle)}>
+		<div class="flex justify-between pt-2 pb-2">
+			<div class="text-xl">{title}</div>
+			<div class="flex align-center justify-center items-center">
+				<p class="text-sm mr-2 text-center text-gray-400">By {pset.Teacher.name}</p>
+			</div>
 		</div>
-	</div>
-	<div class="mt-3 self-start text-left px-3">
-		<p class="indent-8">{pset.description}</p>
-	</div>
-	<div class="flex flex-row justify-end mt-3 w-full flex-wrap pb-2">
-		<p class="text-gray-400 text-sm">{Problems.length} Problem(s)</p>
-	</div>
-</button>
+		<div class="mt-3 self-start text-left px-3">
+			<p class="indent-8">{pset.description}</p>
+		</div>
+		<div class="flex flex-row justify-end mt-3 w-full flex-wrap pb-2">
+			<p class="text-gray-400 text-sm">{Problems.length} Problem(s)</p>
+		</div>
+	</button>
 {:else}
-	<div class="w-full mt-8 min-h-72 p-3 bg-[#1F1F1F] rounded cursor-pointer flex flex-col flex-wrap">
+	<div class="w-full mt-8 min-h-72 p-3 bg-[#1F1F1F] rounded cursor-pointer flex flex-col flex-wrap order-first">
 		<div>
 			<div class="w-full flex justify-between">
 				<h2 class="text-2xl mb-4">{pset.title}</h2>

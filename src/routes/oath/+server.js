@@ -62,7 +62,7 @@ export const GET = async ({ url }) => {
             }
 
             const accessToken = jwt.sign({ ...payload, role }, APP_JWT_SECRET);
-            const expires = new Date(Date.now() + 60 * 60 * 10 * 1000).toUTCString(); // 10 hours
+            const expires = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toUTCString(); // 2 weeks
 
             return new Response(null, {
                 status: 303, // 303 means "See Other", commonly used for redirects after form submission
