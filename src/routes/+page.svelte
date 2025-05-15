@@ -11,7 +11,7 @@
 
 	let showCreatePSetModal = $state(false);
 	let { data } = $props();
-	$inspect(data);
+	$inspect(data.user);
 </script>
 
 {#if data.user?.role === 'teacher'}
@@ -34,6 +34,8 @@
 			closeModal={() => (showCreatePSetModal = false)}
 			show={showCreatePSetModal}
 			email={data.user.email}
+			name={data.user.name}
+			pictureURL={data.user.picture}
 		/>
 	</div>
 {:else if data.user?.role === 'student'}
@@ -45,7 +47,7 @@
 			{#if data.psets}
 				{#each data.psets as pset}
 					{#if pset.Problem.length > 0}
-					<StudentPSBox title={pset.title} Problems={pset.Problem} />
+					<StudentPSBox title={pset.title} pset={pset} Problems={pset.Problem} />
 					{/if}
 				{/each}
 			{/if}

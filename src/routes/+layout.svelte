@@ -44,10 +44,8 @@
 			<button class="btn btn-outline" onclick={() => (openLogin.open = true)}> Login </button>
 		{/if}
 	</div>
-	<!--Navbar ends and body begins-->
-	{@render children?.()}
 
-	<TermsModal />
+	{@render children?.()}
 
 	{#if openLogin.open && !loggedIn}
 		<MobileLoginModal />
@@ -60,4 +58,6 @@
 	{#if openSettings && loggedIn}
 		<MobileSettingsModal bind:openSettings {user} />
 	{/if}
+
+	<TermsModal />
 </div>

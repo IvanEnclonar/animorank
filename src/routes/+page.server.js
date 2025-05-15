@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import { OAuth2Client } from 'google-auth-library';
+import { auth, OAuth2Client } from 'google-auth-library';
 import { SECRET_CLIENT_ID, SECRET_CLIENT_SECRET } from '$env/static/private';
 import { supabase } from "$lib/supabaseClient";
 
@@ -59,6 +59,8 @@ export const actions = {
             title: formData.get('title'),
             description: formData.get('description'),
             owner_email: formData.get('owner_email'),
+            author_name: formData.get('author_name'),
+            author_profile_url: formData.get('author_picture'),
             auto_accept: formData.get('auto_accept') === 'on' ? true : false,
             is_global: formData.get('is_private') === 'on' ? false : true,
         };  
