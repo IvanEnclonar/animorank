@@ -37,7 +37,7 @@
             <div class="flex flex-row items-center mb-2 align-center">
                 <span class="font-semibold mr-2">Animorank</span>
                 <div class="mt-2">
-                    <a class="github-button" href="https://github.com/ivanenclonar/animorank" data-color-scheme="no-preference: light; light: light; dark: dark;" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star ivanenclonar/animorank on GitHub">Star</a>
+                    <a class="github-button" href="https://github.com/ivanenclonar/animorank" data-color-scheme="no-preference: light; light: light; dark: dark;" data-size="large" data-show-count="true" aria-label="Star ivanenclonar/animorank on GitHub">Star</a>
                 </div>
             </div>
             <p class="text-gray-400 text-sm">
