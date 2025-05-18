@@ -38,7 +38,7 @@ export const handle: Handle = async ({ event, resolve }) => {
                 throw redirect(302, "/about");
             }
 
-            if (requestedPath.startsWith("/create") || requestedPath.startsWith("/edit") || requestedPath.startsWith("/api/problems")) {
+            if (requestedPath.startsWith("/create") || requestedPath.startsWith("/api/problems")) {
                 if (event.locals.user.role !== "teacher") {
                     throw redirect(302, "/");
                 }

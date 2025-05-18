@@ -5,7 +5,6 @@
 
 	let showCreatePSetModal = $state(false);
 	let { data } = $props();
-	$inspect(data.user);
 </script>
 
 {#if data.user?.role === 'teacher'}

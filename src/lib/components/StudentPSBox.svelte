@@ -4,7 +4,6 @@
 	let {title, Problems, pset } = $props();
 
 	let toggle = $state(false);
-	$inspect(pset);
 </script>
 
 {#if !toggle}
