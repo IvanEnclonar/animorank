@@ -109,7 +109,6 @@
 				if (res.ok) {
 					// Store the current history as last known
 					localStorage.setItem(`lastKnown_${problem.id}`, JSON.stringify(combinedHistory));
-					console.log('History Updated');
 				} else {
 					console.log('History Update Failed');
 				}
