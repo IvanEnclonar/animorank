@@ -1,10 +1,4 @@
 <script>
-	import dropdown from '$lib/assets/dropdown.svg';
-	import edit from '$lib/assets/edit.svg';
-	import done from '$lib/assets/done.svg';
-	import close from '$lib/assets/close.svg';
-	import add from '$lib/assets/add-plus.svg';
-	import del from '$lib/assets/delete.svg';
 	import StudentPSBox from '$lib/components/StudentPSBox.svelte';
 	import TeacherPSBox from '$lib/components/TeacherPSBox.svelte';
 	import CreateNewSet from '$lib/components/CreateNewSet.svelte';
