@@ -121,7 +121,7 @@
 	// Set up the interval when the component is mounted
 	onMount(() => {
 		localStorage.clear();
-		interval = setInterval(updateSessionHistory, 30000); // Run every 30 seconds
+		interval = setInterval(updateSessionHistory, 15000); // Run every 15 seconds
 	});
 
 	// Clean up the interval when the component is destroyed
