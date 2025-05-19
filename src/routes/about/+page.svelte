@@ -50,7 +50,7 @@
             <ul class="text-gray-400 text-sm">
                 <li class="font-semibold mb-2 text-white">Connect</li>
                 <li class="mb-1 hover:text-white cursor-pointer" >
-                    <a href="mailto:paul_enclonar@dlsu.edu.ph" class="mb-1 hover:text-white cursor-pointer block">Contact Us</a>
+                    <button onclick={() => {openTerms.contact = true}} class="mb-1 hover:text-white cursor-pointer block">Contact Us</button>
                 </li>
                 <li class="mb-1 hover:text-white cursor-pointer" >
                     <a href="https://forms.gle/uDpnjEoYkyjHZsWVA" class="mb-1 hover:text-white cursor-pointer block">Feedback</a>

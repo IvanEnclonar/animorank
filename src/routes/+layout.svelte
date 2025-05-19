@@ -6,6 +6,7 @@
 	import MobileSettingsModal from '$lib/components/MobileSettingsModal.svelte';
     import SignUpModal from '$lib/components/SignUpModal.svelte';
 	import TermsModal from '$lib/components/TermsModal.svelte';
+	import ContactModal from '$lib/components/ContactModal.svelte';
 
 	let openSettings = $state(false);
 	interface Props {
@@ -60,4 +61,6 @@
 	{/if}
 
 	<TermsModal />
+
+	<ContactModal />
 </div>
