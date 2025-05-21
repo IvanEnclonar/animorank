@@ -11,19 +11,27 @@
 
 	const about = () => {
 		openSettings = false;
-		//navigate to about page
 		goto('/about');
 	};
+
 </script>
 
-<div class="fixed grid place-items-center w-full h-full">
-	<div class="w-96 p-8 flex flex-col justify-center items-center z-10">
+<div class="fixed grid place-items-center w-full h-full z-20">
+	<button
+		onclick={() => {
+			openSettings = false;
+		}}
+		class="absolute w-full h-full bg-black opacity-80"
+		aria-label="Close"
+	>
+	</button>
+	<div class="w-96 p-8 flex flex-col justify-center items-center z-30">
 		<div class="grid place-items-center w-48 h-48 bg-gray-100 rounded-full mb-2 overflow-hidden">
 			<img src={user.picture} alt="profile" class="w-full h-full rounded-full" />
 		</div>
 		<h2 class="mb-10">{user.email}</h2>
 		<button class="mb-2 underline cursor-pointer" onclick={logout}>Logout</button>
-		<button class="mb-2 underline cursor-pointer" onclick={about}>About</button>
+		<button onclick={about} class="mb-2 underline cursor-pointer">About</button>
 		<a class="mb-2 underline cursor-pointer" href="https://forms.gle/uDpnjEoYkyjHZsWVA" target="_blank">Feedback</a>
 		<button
 			class="btn mt-4 btn-square btn-ghost"
@@ -46,12 +54,4 @@
 			</svg>
 		</button>
 	</div>
-	<button
-		onclick={() => {
-			openSettings = false;
-		}}
-		class="absolute w-full h-full z-100 bg-black opacity-80"
-		aria-label="Close"
-	>
-	</button>
 </div>

@@ -1,4 +1,3 @@
-import StudentPsBox from '$lib/components/StudentPSBox.svelte';
 import { supabase } from '$lib/supabaseClient';
 import { json } from '@sveltejs/kit';
 

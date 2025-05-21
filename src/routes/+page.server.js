@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import { OAuth2Client } from 'google-auth-library';
+import { auth, OAuth2Client } from 'google-auth-library';
 import { SECRET_CLIENT_ID, SECRET_CLIENT_SECRET } from '$env/static/private';
 import { supabase } from "$lib/supabaseClient";
 
@@ -35,7 +35,7 @@ export const load = async ({ locals }) => {
 
 export const actions = {
     login: async ({ request }) => {
-        const redirectURL = 'https://animorank.com/oath';
+        const redirectURL = request.headers.get('origin') + "/oath";
 
         const oAuth2Client = new OAuth2Client(
             SECRET_CLIENT_ID,
@@ -53,33 +53,46 @@ export const actions = {
         return redirect(302, authUrl);
     },
 
-    createPset: async ({ request }) => {
-        const formData = await request.formData();
-        const input = {
-            title: formData.get('title'),
-            description: formData.get('description'),
-            owner_email: formData.get('owner_email'),
-            auto_accept: formData.get('auto_accept') === 'on' ? true : false,
-            is_global: formData.get('is_private') === 'on' ? false : true,
-        };  
+    createPset: async ({ request, locals }) => {
+        if (locals.user) {
+            if (locals.user.role !== 'teacher') {
+                return {
+                    data: null,
+                    error: 'You are not authorized to create a problem.'
+                };
+            } 
+            else {
+                const formData = await request.formData();
+                const input = {
+                    title: formData.get('title'),
+                    description: formData.get('description'),
+                    owner_email: formData.get('owner_email'),
+                    author_name: formData.get('author_name'),
+                    author_profile_url: formData.get('author_picture'),
+                    auto_accept: formData.get('auto_accept') === 'on' ? true : false,
+                    is_global: formData.get('is_private') === 'on' ? false : true,
+                };  
 
-        // Check if input is valid
-        if (!input.title || !input.description || !input.owner_email) {
-            return {
-                error: 'All fields are required'
-            }
-        } else {
-            // Insert into database
-            const { data, error } = await supabase
-                .from('Problem_set')
-                .insert([
-                    input
-                ]);
+                // Check if input is valid
+                if (!input.title || !input.description || !input.owner_email) {
+                    return {
+                        error: 'All fields are required'
+                    }
+                } else {
+                    // Insert into database
+                    const { data, error } = await supabase
+                        .from('Problem_set')
+                        .insert([
+                            input
+                        ]);
 
-            return {
-                data: data,
-                error: error
+                    return {
+                        data: data,
+                        error: error
+                    }
+                }
             }
+
         }
     },
 };

@@ -259,8 +259,6 @@
 						<option>int</option>
 						<option>float</option>
 						<option>char</option>
-						<option>string</option>
-						<option>bool</option>
 					</select>
 					<div class="join h-full">
 						<div class="badge badge-neutral join-item grid place-items-center h-full">Parameter Count</div>
@@ -287,10 +285,6 @@
 								<option>float[]</option>
 								<option>char</option>
 								<option>char[]</option>
-								<option>string</option>
-								<option>string[]</option>
-								<option>bool</option>
-								<option>bool[]</option>
 							</select>
 						</div>
 					{/each}

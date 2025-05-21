@@ -7,10 +7,12 @@ import type { JwtPayload } from 'jsonwebtoken';
 export const handle: Handle = async ({ event, resolve }) => {
     const requestedPath = event.url.pathname;
     const cookies = event.cookies;
-    const protectedRoutes = ["/edit", "/create", "/profile", "/",]
+    const protectedRoutes = ["/create", "/problem", "/api"]
+    const disabledRoutes = ["/edit", "/pset"]
 
     // Auth check
-    const token = cookies.get("token");
+    const token = cookies.get("token"); 
+
 
     if (token) {
         const res = validateToken(token);
@@ -21,13 +23,38 @@ export const handle: Handle = async ({ event, resolve }) => {
         }
     } else {
         event.locals.user = null;
+    } 
+
+
+    if (requestedPath== "/"){
+            if (!event.locals.user) {
+                throw redirect(302, "/about");
+            }
+    }
+
+    for (const route of protectedRoutes) {
+        if (requestedPath.startsWith(route)) {
+            if (!event.locals.user) {
+                throw redirect(302, "/about");
+            }
+
+            if (requestedPath.startsWith("/create") || requestedPath.startsWith("/api/problems")) {
+                if (event.locals.user.role !== "teacher") {
+                    throw redirect(302, "/");
+                }
+            }
+        }
+    }
+
+    for (const route of disabledRoutes) {
+        if (requestedPath.startsWith(route)) {
+            if (event.locals.user) {
+                throw redirect(302, "/");
+            }
+        }
     }
 
     const response = await resolve(event);
-
-    if (protectedRoutes.includes(requestedPath) && !event.locals.user) {
-        throw redirect(303, "/about")
-    }
 
     return response;
 };

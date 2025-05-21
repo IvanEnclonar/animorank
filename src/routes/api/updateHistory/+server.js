@@ -4,7 +4,6 @@ import { supabase } from '$lib/supabaseClient';
 export const POST = async (event) => {
     
     const body = await event.request.json()
-
     const { data, error } = await supabase
         .from('Session')
         .upsert({
@@ -15,7 +14,6 @@ export const POST = async (event) => {
         });
     
     if (error) {
-        console.log(error);
         return new Response(JSON.stringify(error), {
             status: 500,
             headers: { "Content-Type": "application/json" }

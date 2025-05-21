@@ -1,17 +1,10 @@
 <script>
-	import dropdown from '$lib/assets/dropdown.svg';
-	import edit from '$lib/assets/edit.svg';
-	import done from '$lib/assets/done.svg';
-	import close from '$lib/assets/close.svg';
-	import add from '$lib/assets/add-plus.svg';
-	import del from '$lib/assets/delete.svg';
 	import StudentPSBox from '$lib/components/StudentPSBox.svelte';
 	import TeacherPSBox from '$lib/components/TeacherPSBox.svelte';
 	import CreateNewSet from '$lib/components/CreateNewSet.svelte';
 
 	let showCreatePSetModal = $state(false);
 	let { data } = $props();
-	$inspect(data);
 </script>
 
 {#if data.user?.role === 'teacher'}
@@ -34,6 +27,8 @@
 			closeModal={() => (showCreatePSetModal = false)}
 			show={showCreatePSetModal}
 			email={data.user.email}
+			name={data.user.name}
+			pictureURL={data.user.picture}
 		/>
 	</div>
 {:else if data.user?.role === 'student'}
@@ -45,7 +40,7 @@
 			{#if data.psets}
 				{#each data.psets as pset}
 					{#if pset.Problem.length > 0}
-					<StudentPSBox title={pset.title} Problems={pset.Problem} />
+					<StudentPSBox title={pset.title} pset={pset} Problems={pset.Problem} />
 					{/if}
 				{/each}
 			{/if}

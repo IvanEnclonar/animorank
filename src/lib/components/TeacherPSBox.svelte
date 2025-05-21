@@ -101,9 +101,9 @@
 										</label>
 									</div>
 								</div>
-								<button class="btn btn-s ml-2 bg-[#121212] border-0 hover:bg-[#090909]">
+								<!-- <button class="btn btn-s ml-2 bg-[#121212] border-0 hover:bg-[#090909]">
 									<img src={edit} alt="edit" class="h-4 cursor-pointer" />
-								</button>
+								</button> -->
 								{#if !pset.is_global}
 								<button class="btn btn-s ml-2 bg-[#121212] border-0 hover:bg-[#090909]">
 									<img src={statistics} alt="statistics" class="h-5 cursor-pointer" />

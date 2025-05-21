@@ -6,6 +6,7 @@
 	import MobileSettingsModal from '$lib/components/MobileSettingsModal.svelte';
     import SignUpModal from '$lib/components/SignUpModal.svelte';
 	import TermsModal from '$lib/components/TermsModal.svelte';
+	import ContactModal from '$lib/components/ContactModal.svelte';
 
 	let openSettings = $state(false);
 	interface Props {
@@ -44,10 +45,8 @@
 			<button class="btn btn-outline" onclick={() => (openLogin.open = true)}> Login </button>
 		{/if}
 	</div>
-	<!--Navbar ends and body begins-->
-	{@render children?.()}
 
-	<TermsModal />
+	{@render children?.()}
 
 	{#if openLogin.open && !loggedIn}
 		<MobileLoginModal />
@@ -60,4 +59,8 @@
 	{#if openSettings && loggedIn}
 		<MobileSettingsModal bind:openSettings {user} />
 	{/if}
+
+	<TermsModal />
+
+	<ContactModal />
 </div>

@@ -107,7 +107,7 @@
 <div class="grow shadow-inner border-t-2 overflow-hidden">
 	<div class="w-full h-full {!mounted && "bg-[#1f1f1f]"}" bind:this={editorContainer}>
 		{#if !mounted}
-			<p class="content-center">loading editor...</p>
+			<p class="content-center w-full h-full text-grey-400">loading editor...</p>
 		{/if}
 	</div>
 </div>
