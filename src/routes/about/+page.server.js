@@ -4,7 +4,7 @@ import { SECRET_CLIENT_ID, SECRET_CLIENT_SECRET } from '$env/static/private';
 
 export const actions = {
     login: async ({ request }) => {
-        const redirectURL = request.headers.get('origin') + "/oath";
+         const redirectURL = "https://animorank.com/oath";
 
         const oAuth2Client = new OAuth2Client(
             SECRET_CLIENT_ID,
